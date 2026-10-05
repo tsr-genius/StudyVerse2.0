@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f7fb">
+  <meta name="description" content="StudyVerse — Your material. Your path to mastery.">
+  <title>StudyVerse — Your material. Your path to mastery.</title>
+  <style>
+    :root{
+      --bg:#fbf7ef;
+      --panel:#fffefa;
+      --panel-2:#fffaf2;
+      --line:#e9dfd0;
+      --text:#302b27;
+      --muted:#81766d;
+      --soft:#f4ebdf;
+      --accent:#987c63;
+      --accent-2:#b59a80;
+      --accent-soft:#f5eadb;
+      --good:#178b5b;
+      --good-soft:#e8f7ef;
+      --warn:#aa6a00;
+      --warn-soft:#fff4da;
+      --danger:#b23a3a;
+      --danger-soft:#ffe9e9;
+      --shadow:0 20px 55px rgba(32, 34, 48, .09);
+      --shadow-sm:0 8px 24px rgba(32, 34, 48, .06);
+      --radius:20px;
+      --radius-sm:14px;
+      --sidebar:248px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+    .app{min-height:100vh;display:flex}
+    .sidebar{width:var(--sidebar);position:fixed;left:0;top:0;bottom:0;background:rgba(255,252,245,.97);border-right:1px solid var(--line);padding:20px 14px;z-index:50;backdrop-filter:blur(20px)}
+    .brand{display:flex;align-items:center;gap:11px;padding:6px 10px 20px}
+    .brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#6d5cff,#9a91ff);display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 9px 20px rgba(107,92,255,.28)}
+    .brand-name{font-size:17px;font-weight:800;letter-spacing:-.03em}
+    .brand-tag{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.04em}
+    .nav{display:grid;gap:4px;overflow:auto;max-height:calc(100vh - 170px);padding-right:2px}
+    .nav-btn{border:0;background:transparent;padding:10px 11px;border-radius:12px;display:flex;align-items:center;gap:11px;color:#595c68;font-size:13px;font-weight:650;text-align:left;transition:.18s}
+    .nav-btn:hover{background:#f1f1f7;color:var(--text)}
+    .nav-btn.active{background:var(--accent-soft);color:var(--accent)}
+    .nav-icon{width:18px;text-align:center;font-size:15px;opacity:.9}
+    .sidebar-bottom{position:absolute;left:14px;right:14px;bottom:14px}
+    .upgrade{padding:14px;border:1px solid #dfdcff;background:#f2f0ff;border-radius:16px}
+    .upgrade strong{display:block;font-size:12px;margin-bottom:4px}
+    .upgrade span{font-size:10px;color:#656171;line-height:1.35;display:block;margin-bottom:10px}
+    .upgrade button{width:100%;border:0;background:#17181d;color:#fff;padding:9px 11px;border-radius:11px;font-size:11px;font-weight:750}
+    .main{margin-left:var(--sidebar);min-width:0;flex:1}
+    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--line);background:rgba(251,247,239,.92);backdrop-filter:blur(18px);position:sticky;top:0;z-index:40}
+    .search{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:9px 12px;min-width:330px;box-shadow:var(--shadow-sm)}
+    .search input{border:0;outline:0;width:100%;font-size:12px;background:transparent}
+    .top-actions{display:flex;align-items:center;gap:8px}
+    .icon-btn{border:1px solid var(--line);background:#fff;border-radius:11px;width:36px;height:36px;display:grid;place-items:center}
+    .avatar{width:36px;height:36px;border-radius:12px;background:#202126;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
+    .mobile-menu{display:none}
+    .page{display:none;padding:28px 30px 60px;max-width:1450px;margin:0 auto}
+    .page.active{display:block}
+    .eyebrow{font-size:10px;font-weight:800;letter-spacing:.13em;color:var(--accent);text-transform:uppercase;margin-bottom:7px}
+    h1,h2,h3,p{margin-top:0}
+    h1{font-size:34px;letter-spacing:-.045em;margin-bottom:8px}
+    h2{font-size:22px;letter-spacing:-.03em;margin-bottom:7px}
+    h3{font-size:14px;letter-spacing:-.01em;margin-bottom:5px}
+    .sub{font-size:13px;color:var(--muted);line-height:1.55}
+    .hero{background:radial-gradient(circle at 90% 10%,rgba(131,115,255,.23),transparent 32%),linear-gradient(145deg,#fff,#f5f3ff);border:1px solid #e5e3f6;border-radius:28px;padding:30px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.4fr .8fr;gap:22px;overflow:hidden}
+    .hero h1{font-size:42px;max-width:690px}
+    .hero-copy{max-width:650px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+    .primary{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:11px 15px;font-size:12px;font-weight:800;box-shadow:0 10px 20px rgba(107,92,255,.22)}
+    .secondary{background:#fff;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:12px;font-weight:750}
+    .ghost{background:transparent;color:var(--muted);border:0;padding:8px 10px;font-size:12px;font-weight:700}
+    .hero-loop{display:flex;align-items:center;justify-content:center}
+    .loop-card{background:#fff;border:1px solid #e7e5f8;border-radius:22px;padding:18px;width:min(330px,100%);box-shadow:var(--shadow-sm)}
+    .loop-title{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:12px;letter-spacing:.08em}
+    .loop{display:grid;gap:8px}
+    .loop-step{display:flex;align-items:center;gap:9px}
+    .loop-dot{width:22px;height:22px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:10px;font-weight:900}
+    .loop-step span{font-size:11px;font-weight:700}
+    .grid{display:grid;gap:14px}
+    .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:var(--shadow-sm)}
+    .stat .label{font-size:10px;color:var(--muted);font-weight:700;margin-bottom:8px}
+    .stat .value{font-size:26px;font-weight:850;letter-spacing:-.04em}
+    .stat .foot{font-size:10px;color:var(--muted);margin-top:5px}
+    .section{margin-top:22px}
+    .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:11px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:var(--shadow-sm)}
+    .card.tight{padding:14px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .stack{display:grid;gap:10px}
+    .chip{display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border-radius:999px;background:var(--soft);color:#626573;font-size:10px;font-weight:750}
+    .chip.accent{background:var(--accent-soft);color:var(--accent)}
+    .chip.good{background:var(--good-soft);color:var(--good)}
+    .chip.warn{background:var(--warn-soft);color:var(--warn)}
+    .material-card{display:flex;flex-direction:column;gap:12px;min-height:165px}
+    .material-icon{width:42px;height:42px;border-radius:13px;background:#f0effe;display:grid;place-items:center;font-size:20px}
+    .material-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:auto}
+    .mini-btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 7px;font-size:10px;font-weight:750}
+    .mini-btn:hover{border-color:#cccaf8;background:#faf9ff}
+    .upload-zone{border:1.5px dashed #c7c4e9;background:linear-gradient(180deg,#fbfbff,#f6f4ff);border-radius:20px;padding:25px;text-align:center;transition:.18s}
+    .upload-zone.drag{border-color:var(--accent);background:#efedff}
+    .upload-zone .upload-icon{font-size:30px;margin-bottom:8px}
+    .upload-zone input{display:none}
+    .feature{display:flex;gap:12px;align-items:flex-start}
+    .feature-icon{width:35px;height:35px;border-radius:11px;background:#f2f2f7;display:grid;place-items:center;flex:none}
+    .feature p{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:0}
+    .subject-card{padding:18px;border:1px solid var(--line);background:#fff;border-radius:18px;min-height:150px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-sm)}
+    .subject-top{display:flex;align-items:center;justify-content:space-between}
+    .subject-icon{width:40px;height:40px;border-radius:12px;background:#f2f1f8;display:grid;place-items:center;font-size:18px}
+    .progressbar{height:7px;background:#eeeff4;border-radius:999px;overflow:hidden}
+    .progressbar span{height:100%;display:block;background:linear-gradient(90deg,#6b5cff,#938aff);border-radius:999px}
+    .course-list{display:grid;gap:8px}
+    .course-item{display:flex;justify-content:space-between;align-items:center;padding:12px 13px;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .course-item strong{font-size:11px}
+    .course-item span{font-size:10px;color:var(--muted)}
+    .guide-card{min-height:210px}
+    .guide-count{font-size:10px;color:var(--muted)}
+    .guide-chapters{margin-top:13px;display:grid;gap:6px;max-height:100px;overflow:auto}
+    .guide-chapters button{border:0;background:#f7f7fa;border-radius:9px;padding:7px 9px;text-align:left;font-size:10px;color:#555865}
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .select,.input,.textarea{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 11px;outline:0;font-size:11px;width:100%}
+    .textarea{min-height:110px;resize:vertical;line-height:1.5}
+    .field{display:grid;gap:6px}
+    .field label{font-size:10px;font-weight:750;color:#666976}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .note-cover{height:125px;border-radius:16px;padding:14px;display:flex;align-items:flex-end;font-size:14px;font-weight:850;letter-spacing:-.02em}
+    .cover-lav{background:#e8e4ff}.cover-peach{background:#ffe6da}.cover-mint{background:#ddf4e9}.cover-blue{background:#e1edff}.cover-yellow{background:#fff0bd}.cover-dark{background:#26272c;color:#fff}
+    .editor{display:grid;grid-template-columns:210px 1fr;gap:12px;min-height:520px}
+    .editor-sidebar{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}
+    .template{padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:10px;font-weight:700;text-align:left;margin-bottom:7px;width:100%}
+    .template.active{background:var(--accent-soft);border-color:#dbd7ff;color:var(--accent)}
+    .paper{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:var(--shadow-sm);background-image:linear-gradient(#fff,#fff),repeating-linear-gradient(to bottom,transparent 0,transparent 31px,#eeeeF4 32px);background-origin:border-box;background-clip:padding-box,border-box}
+    .paper h2{font-size:24px}
+    .paper .note-line{font-size:12px;color:#565966;line-height:2.7}
+    .study-grid{display:grid;grid-template-columns:280px 1fr;gap:14px;align-items:start}
+    .chapter-nav{position:sticky;top:84px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;max-height:calc(100vh - 115px);overflow:auto}
+    .chapter-nav button{width:100%;text-align:left;border:0;background:#fff;border-radius:10px;padding:9px;font-size:10px;color:#666976}
+    .chapter-nav button.active{background:var(--accent-soft);color:var(--accent);font-weight:800}
+    .guide-content{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;min-height:560px}
+    .guide-content h2{font-size:28px}.guide-content h3{font-size:17px;margin-top:22px}.guide-content p,.guide-content li{font-size:12px;color:#4e515b;line-height:1.8}.guide-content ul{padding-left:18px}.example{background:#f8f7ff;border:1px solid #e9e6ff;border-radius:14px;padding:14px;margin:14px 0;font-size:11px;line-height:1.6}.exam-tip{background:#fff8e7;border:1px solid #f2e4b8;border-radius:14px;padding:14px;margin:14px 0;font-size:11px;line-height:1.6}.mistake{background:#fff0f0;border:1px solid #f1d1d1;border-radius:14px;padding:14px;margin:14px 0;font-size:11px;line-height:1.6}
+    .paper[data-paper-style="cornell"]{background-image:linear-gradient(90deg,transparent 0,transparent 27%,#b9b4e7 27%,#b9b4e7 calc(27% + 2px),transparent calc(27% + 2px)),linear-gradient(to bottom,transparent 0,transparent 31px,#e7e4ef 32px);background-size:100% 32px;padding-top:28px}.paper[data-paper-style="grid"],.paper[data-paper-style="graph"]{background-image:linear-gradient(#e5e2ed 1px,transparent 1px),linear-gradient(90deg,#e5e2ed 1px,transparent 1px);background-size:22px 22px}.paper[data-paper-style="dot grid"]{background-image:radial-gradient(#c9c5d9 1px,transparent 1px);background-size:16px 16px}.paper[data-paper-style="lined"]{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 30px,#e7dfd4 31px,transparent 32px)}.paper[data-paper-style="plain"]{background-image:none}.paper .note-line{background:rgba(255,255,255,.68);border-radius:5px;padding:2px 6px;margin:7px 0}.palette{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 10px}.swatch{width:25px;height:25px;border-radius:50%;border:1px solid #d8d7e0;background:var(--swatch,#fff);box-shadow:inset 0 0 0 2px #fff}.swatch[data-paper-color="#ffffff"]{--swatch:#fff}.swatch[data-paper-color="#fff7e8"]{--swatch:#fff7e8}.swatch[data-paper-color="#f0edff"]{--swatch:#f0edff}.swatch[data-paper-color="#eafaf1"]{--swatch:#eafaf1}.swatch[data-paper-color="#fff0e8"]{--swatch:#fff0e8}.swatch[data-paper-color="#edf6ff"]{--swatch:#edf6ff}.pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.price-card{position:relative;border:1px solid var(--line);border-radius:22px;background:#fff;padding:26px;box-shadow:var(--shadow-sm);overflow:hidden}.price-card.pro{border:2px solid #8a7cf6;background:linear-gradient(155deg,#fbfaff,#f0edff 72%,#fff)}.pro-ribbon{position:absolute;right:-36px;top:20px;transform:rotate(35deg);background:#7665df;color:white;padding:6px 42px;font-size:9px;font-weight:900;letter-spacing:.08em}.price-kicker{font-size:10px;letter-spacing:.15em;font-weight:900;color:var(--accent)}.price-card h2{margin:8px 0}.price{font-size:38px;font-weight:900;letter-spacing:-.05em;margin:18px 0 2px}.price small{font-size:12px;font-weight:600;letter-spacing:0;color:var(--muted)}.annual{font-size:12px;font-weight:800;margin:6px 0 16px}.annual span{display:block;font-size:10px;font-weight:500;color:var(--muted);margin-top:3px}.price-card ul{padding-left:20px;line-height:1.9;font-size:12px;color:#555866;min-height:240px}.price-card li{padding-left:3px;margin:3px 0}.choose-plan{width:100%;margin-top:9px}.plan-selection{margin-top:10px;padding:12px;border-radius:12px;background:#f3f0ff;color:#5e50bf;font-weight:800}.question-feedback{margin-top:8px;font-size:11px;line-height:1.6;padding:10px;border-radius:10px;background:#f7f6fc}.quiz-question{padding:15px;border:1px solid var(--line);border-radius:14px;background:white;margin-bottom:12px}.quiz-question h3{font-size:13px}.quiz-question label{display:flex;gap:8px;align-items:flex-start;padding:8px;border-radius:8px;font-size:12px}.quiz-question label:hover{background:#f5f3ff}.guide-content .practice-prompt{padding:12px;border-radius:12px;background:#f4f1ff;margin:12px 0;font-size:12px;line-height:1.7}@media(max-width:780px){.pricing-grid{grid-template-columns:1fr}.price-card ul{min-height:0}.editor{grid-template-columns:1fr}.editor-sidebar{order:0}}
+    .lesson{min-height:160px}
+    .lesson-demo{margin-top:10px;width:100%}.demo-diagram{display:block;width:100%;max-width:520px;height:auto;margin:14px auto;border:1px solid #e5e0f5;border-radius:14px;background:#fff;padding:8px}.onboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.onboard-subjects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.onboard-subjects label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:12px}.onboard-step{padding:12px;border-radius:12px;background:var(--accent-soft);margin:10px 0}.guide-content{max-height:72vh;overflow:auto}.paper{min-height:600px}.paper [contenteditable=true]:focus{outline:2px dashed #a59af0;outline-offset:2px}.demo-section{padding:12px;background:#f7f4ff;border:1px solid #e4ddff;border-radius:12px;margin:12px 0}@media(max-width:520px){.onboard-grid,.onboard-subjects{grid-template-columns:1fr 1fr}}
+    .lesson .badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:#f0f0f5;font-size:9px;font-weight:800;color:#626573}
+    .practice-builder{display:grid;grid-template-columns:310px 1fr;gap:14px;align-items:start}
+    .practice-panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;position:sticky;top:84px}
+    .question-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px;box-shadow:var(--shadow-sm)}
+    .question{font-size:15px;line-height:1.6;font-weight:750;margin-bottom:13px}
+    .option{display:flex;gap:8px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:11px;margin-bottom:7px;font-size:11px}
+    .option input{margin-top:2px}
+    .test-actions{display:flex;gap:8px;margin-top:12px}
+    .exam-hero{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px}
+    .timeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:13px}
+    .stage{padding:12px;border-radius:13px;background:#f5f5f8;border:1px solid var(--line);min-height:92px}.stage.active{background:var(--accent-soft);border-color:#ddd9ff}.stage strong{font-size:10px;display:block;margin-bottom:5px}.stage span{font-size:9px;color:var(--muted);line-height:1.4}
+    .plan-item{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-bottom:1px solid var(--line)}.plan-item:last-child{border-bottom:0}.plan-time{font-size:10px;font-weight:850}.plan-sub{font-size:10px;color:var(--muted)}
+    .chart-card{height:300px;position:relative;padding-bottom:40px}.chart{width:100%;height:230px;display:block}.chart-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);padding:0 12px}
+    .map{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.map-node{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px}.map-node strong{font-size:11px}.map-node small{display:block;color:var(--muted);font-size:9px;margin-top:4px}.map-node .ring{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:4px solid #ececf2;font-size:9px;font-weight:850;margin-bottom:10px}.map-node .ring.good{border-color:#bfe7d2}.map-node .ring.mid{border-color:#ddd7ff}.map-node .ring.low{border-color:#ffd8af}
+    .reward{min-height:145px}.badge-icon{width:43px;height:43px;border-radius:13px;background:#f2f1f9;display:grid;place-items:center;font-size:20px}.reward.locked{opacity:.55}
+    .post{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}.post-head{display:flex;align-items:center;gap:9px}.post-avatar{width:34px;height:34px;border-radius:11px;background:#eeeef4;display:grid;place-items:center;font-size:10px;font-weight:850}.post-meta{font-size:9px;color:var(--muted)}.post-body{font-size:11px;line-height:1.65;color:#4f525d;margin:11px 0}.post-actions{display:flex;gap:8px}.post-actions button{background:#f5f5f8;border:0;border-radius:10px;padding:7px 9px;font-size:9px}
+    .interest-search{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;display:flex;gap:8px}.interest-search input{flex:1;border:0;outline:0;font-size:12px}.interest-suggest{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.interest-suggest button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 9px;font-size:9px}
+    .teacher{display:grid;grid-template-columns:250px 1fr;gap:14px;height:calc(100vh - 145px);min-height:560px}.teacher-side{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;overflow:auto}.teacher-main{background:#fff;border:1px solid var(--line);border-radius:18px;display:grid;grid-template-rows:1fr auto}.chat{padding:18px;overflow:auto;display:grid;gap:12px;align-content:start}.bubble{max-width:78%;padding:11px 13px;border-radius:15px;font-size:11px;line-height:1.6;white-space:pre-wrap}.bubble.ai{background:#f2f1fb;border-top-left-radius:5px}.bubble.user{background:#17181d;color:#fff;margin-left:auto;border-top-right-radius:5px}.chat-box{border-top:1px solid var(--line);padding:12px;display:flex;gap:8px}.chat-box textarea{flex:1;min-height:46px;max-height:130px;border:1px solid var(--line);border-radius:12px;padding:10px;font-size:11px;resize:vertical;outline:0}.chat-box button{width:44px;border:0;border-radius:12px;background:var(--accent);color:#fff}
+    .empty{padding:28px;text-align:center;border:1px dashed var(--line);border-radius:17px;background:#fff}.empty strong{display:block;font-size:12px;margin-bottom:5px}.empty span{font-size:10px;color:var(--muted)}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(25,26,32,.38);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}.modal-backdrop.open{display:flex}.modal{background:#fff;border-radius:22px;width:min(720px,100%);max-height:90vh;overflow:auto;box-shadow:0 30px 100px rgba(0,0,0,.2);padding:20px}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}.modal-title{font-size:17px;font-weight:850;letter-spacing:-.02em}.close{border:0;background:#f2f2f5;border-radius:10px;width:32px;height:32px}.output{font-size:12px;line-height:1.75;color:#484b55}.output h1,.output h2,.output h3{margin-top:17px}.output h3{font-size:15px}.output strong{color:#262731}.output ul,.output ol{padding-left:20px}.loading{display:inline-flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}.spin{width:13px;height:13px;border:2px solid #ddd;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;background:#17181d;color:#fff;border-radius:12px;padding:10px 13px;font-size:10px;font-weight:750;z-index:200;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .kicker{font-size:9px;color:var(--muted);font-weight:700}.small{font-size:10px}.muted{color:var(--muted)}
+    @media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.practice-builder,.study-grid,.teacher{grid-template-columns:1fr}.practice-panel,.chapter-nav{position:static}.teacher{height:auto}.teacher-main{min-height:650px}.search{min-width:240px}}
+    @media(max-width:780px){.sidebar{transform:translateX(-100%);transition:.22s}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.topbar{padding:0 14px}.search{min-width:0;flex:1}.mobile-menu{display:grid;width:36px;height:36px;border:1px solid var(--line);background:#fff;border-radius:11px;place-items:center}.top-actions{gap:5px}.page{padding:20px 14px 50px}.grid-3,.grid-2,.grid-4{grid-template-columns:1fr}.hero{padding:22px;border-radius:21px}.hero h1{font-size:31px}.editor{grid-template-columns:1fr}.map{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:1fr 1fr}.field-grid{grid-template-columns:1fr}.teacher-side{display:none}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div><div class="brand-name">StudyVerse</div><div class="brand-tag">YOUR MATERIAL. YOUR PATH TO MASTERY.</div></div>
+    </div>
+    <nav class="nav" id="nav">
+      <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span>Home</button>
+      <button class="nav-btn" data-page="subjects"><span class="nav-icon">◈</span>Subjects</button>
+      <button class="nav-btn" data-page="materials"><span class="nav-icon">□</span>Materials</button>
+      <button class="nav-btn" data-page="notes"><span class="nav-icon">✎</span>Notes</button>
+      <button class="nav-btn" data-page="guides"><span class="nav-icon">▤</span>Study Guides</button>
+      <button class="nav-btn" data-page="lessons"><span class="nav-icon">▶</span>Lessons</button>
+      <button class="nav-btn" data-page="practice"><span class="nav-icon">✓</span>Practice</button>
+      <button class="nav-btn" data-page="exam"><span class="nav-icon">⌁</span>Exam Prep</button>
+      <button class="nav-btn" data-page="planner"><span class="nav-icon">▦</span>Planner</button>
+      <button class="nav-btn" data-page="progress"><span class="nav-icon">↗</span>Progress</button>
+      <button class="nav-btn" data-page="map"><span class="nav-icon">◎</span>Knowledge Map</button>
+      <button class="nav-btn" data-page="rewards"><span class="nav-icon">◆</span>Rewards</button>
+      <button class="nav-btn" data-page="community"><span class="nav-icon">☷</span>Community</button>
+      <button class="nav-btn" data-page="future"><span class="nav-icon">⌖</span>Career Path</button>
+      <button class="nav-btn" data-page="universities"><span class="nav-icon">⌂</span>Universities</button>
+      <button class="nav-btn" data-page="teacher"><span class="nav-icon">✦</span>AI Teacher</button>
+      <button class="nav-btn" data-page="pricing"><span class="nav-icon">✦</span>Plans & Pricing</button>
+      <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:0">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+        <div class="search"><span>⌕</span><input id="globalSearch" placeholder="Search StudyVerse…" autocomplete="off"></div>
+      </div>
+      <div class="top-actions"><button class="icon-btn" data-action="notifications">♧</button><button class="icon-btn" data-action="quick-upload">＋</button><div class="avatar" id="avatar">TS</div></div>
+    </header>
+
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">SHARK TANK DEMO · SAMPLE DATA</div>
+          <h1>Everything you learn. One path to mastery.</h1>
+          <p class="sub">Explore a complete student workspace with sample notes, demo coursebook uploads, study tools, career guidance and university discovery. This Shark Tank prototype demonstrates the intended experience.</p>
+          <div class="hero-actions"><button class="primary" data-action="quick-upload">Upload material</button><button class="secondary" data-go="teacher">Ask AI Teacher</button><button class="secondary" data-go="practice">Start practice</button></div>
+        </div>
+        <div class="hero-loop"><div class="loop-card"><div class="loop-title">THE STUDYVERSE LOOP</div><div class="loop"><div class="loop-step"><div class="loop-dot">1</div><span>Baseline</span></div><div class="loop-step"><div class="loop-dot">2</div><span>Knowledge Map</span></div><div class="loop-step"><div class="loop-dot">3</div><span>Learn + Practise</span></div><div class="loop-step"><div class="loop-dot">4</div><span>Assess + Analyse</span></div><div class="loop-step"><div class="loop-dot">5</div><span>Improve + Repeat</span></div></div></div></div>
+      </div>
+      <div class="grid grid-4 section" id="homeStats"></div>
+      <div class="grid grid-2 section">
+        <div class="card"><div class="section-head"><div><h2>Continue learning</h2><div class="sub">Your next best actions based on your current workspace.</div></div><button class="ghost" data-go="progress">View progress</button></div><div class="course-list" id="continueList"></div></div>
+        <div class="card"><div class="section-head"><div><h2>AI workspace</h2><div class="sub">Choose what StudyVerse should create from your material.</div></div></div><div class="stack"><div class="feature"><div class="feature-icon">✦</div><div><strong class="small">AI Summary</strong><p>Get the key ideas, definitions, examples and relationships without losing the meaning.</p></div></div><div class="feature"><div class="feature-icon">✎</div><div><strong class="small">AI Notes</strong><p>Turn material into clean, revision-ready notes with terminology, examples and exam tips.</p></div></div><div class="feature"><div class="feature-icon">✓</div><div><strong class="small">AI Practice</strong><p>Generate questions directly from the uploaded source, then use results to update your learning path.</p></div></div></div></div>
+      </div>
+      <div class="section"><div class="section-head"><div><h2>Your subjects</h2><div class="sub">Every subject gets the same learning ecosystem.</div></div><button class="ghost" data-go="subjects">See all</button></div><div class="grid grid-4" id="homeSubjects"></div></div>
+    </section>
+
+    <section class="page" id="page-subjects"><div class="eyebrow">Your curriculum</div><h1>Subjects</h1><p class="sub">Choose the subjects you take so your dashboard and revision path feel like yours.</p><div class="card section"><div class="row"><div><h3>Your selected subjects</h3><p class="sub">Tap subjects to select or remove them.</p></div><button class="secondary" id="selectSubjects">Edit subjects</button></div><div id="selectedSubjects" class="interest-suggest"></div></div><div class="grid grid-4 section" id="subjectsGrid"></div></section>
+
+    <section class="page" id="page-materials">
+      <div class="row"><div><div class="eyebrow">Your material</div><h1>Materials</h1><p class="sub">Add a sample coursebook file and explore the demo notes and study tools.</p></div><button class="primary" data-action="quick-upload">＋ Add material</button></div>
+      <div class="section upload-zone" id="uploadZone"><div class="upload-icon">⌂</div><h3>Drop a coursebook, worksheet or image here</h3><div class="sub">PDF, DOCX, PPTX, TXT, Markdown, common code/text files, JPG, PNG and WEBP.</div><input type="file" id="materialInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.md,.html,.csv,.json,.js,.ts,.py,.java,.c,.cpp,.css,.php,.rb,.sh,.tex,.jpg,.jpeg,.png,.webp"><div style="margin-top:12px"><button class="primary" data-action="browse-upload">Choose a file</button></div></div>
+      <div class="section"><div class="section-head"><div><h2>Library</h2><div class="sub" id="materialCount">No materials yet.</div></div><select class="select" id="materialFilter" style="width:180px"><option value="all">All subjects</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>Biology</option><option>Chemistry</option><option>Physics</option><option>Computer Science</option><option>History</option><option>Geography</option><option>Business</option><option>Economics</option><option>French</option><option>Spanish</option></select></div><div class="grid grid-3" id="materialsGrid"></div></div>
+    </section>
+
+    <section class="page" id="page-notes"><div class="row"><div><div class="eyebrow">Write, annotate, build</div><h1>Notes</h1><p class="sub">Typed notes, templates, colours, diagrams and AI-assisted expansion in one workspace.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select class="select" id="sampleNotesSubject" style="min-width:150px"><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>Biology</option><option>Chemistry</option><option>Physics</option><option>Computer Science</option><option>History</option><option>Geography</option><option>Business</option><option>Economics</option><option>French</option><option>Spanish</option></select><button class="secondary" id="makeSampleNotes">Create sample notes</button><button class="secondary" data-action="new-note">＋ New notebook</button><button class="primary" data-action="create-note">＋ Create notes</button></div></div><div class="grid grid-3 section" id="notebooksGrid"></div><div class="section editor"><div class="editor-sidebar"><h3>Page templates</h3><button class="template active">Plain</button><button class="template">Lined</button><button class="template">Grid</button><button class="template">Dot grid</button><button class="template">Cornell</button><button class="template">Graph</button><button class="template">Custom</button><div style="height:10px"></div><h3>Paper colour</h3><div class="palette" aria-label="Paper colour"><button class="swatch" title="White" data-paper-color="#ffffff"></button><button class="swatch" title="Cream" data-paper-color="#fff7e8"></button><button class="swatch" title="Lavender" data-paper-color="#f0edff"></button><button class="swatch" title="Mint" data-paper-color="#eafaf1"></button><button class="swatch" title="Peach" data-paper-color="#fff0e8"></button><button class="swatch" title="Sky" data-paper-color="#edf6ff"></button></div><div style="height:10px"></div><h3>Study tools</h3><div class="stack"><button class="mini-btn" data-action="add-highlight">Pastel highlighter</button><button class="mini-btn" data-action="add-marker">Marker pen</button><button class="mini-btn" data-action="add-underline">Underline selection</button><button class="mini-btn" data-action="add-checklist">Add revision checklist</button><button class="mini-btn" data-action="add-diagram">Insert diagram</button><button class="mini-btn" data-action="add-equation">Add equation</button><button class="mini-btn" data-action="ai-note-add">Ask AI to expand</button></div></div><div class="paper"><div class="eyebrow">Sample notebook · editable demo</div><h2 contenteditable="true">Motion — Core ideas</h2><div class="chip accent">Physics · Revision</div><div class="note-line" contenteditable="true"><h3>1. Definition and key vocabulary</h3><p><strong>Motion</strong> is a change in position over time. <strong>Distance</strong> is the total path travelled; <strong>displacement</strong> is the straight-line change in position with direction. <strong>Speed</strong> is distance per unit time. <strong>Velocity</strong> is speed in a stated direction. <strong>Acceleration</strong> is the rate of change of velocity.</p></div><div class="note-line" contenteditable="true"><h3>2. Formula triangle and units</h3><p>Average speed = total distance ÷ total time. Rearranging gives distance = speed × time and time = distance ÷ speed. Use distance in metres (m), time in seconds (s), speed in metres per second (m/s). Acceleration = change in velocity ÷ time, measured in m/s².</p><div class="demo-diagram"><svg viewBox="0 0 360 130" width="100%" role="img" aria-label="Speed distance time formula triangle"><path d="M180 10 L55 112 L305 112 Z" fill="#f0edff" stroke="#7867df" stroke-width="2"/><path d="M118 61 H242" stroke="#7867df" stroke-width="2"/><text x="180" y="48" text-anchor="middle" font-size="22" fill="#5546a7" font-weight="bold">Distance</text><text x="112" y="91" text-anchor="middle" font-size="18" fill="#5546a7">Speed</text><text x="248" y="91" text-anchor="middle" font-size="18" fill="#5546a7">Time</text></svg></div></div><div class="note-line" contenteditable="true"><h3>3. Worked example — every step</h3><p><strong>Question:</strong> A cyclist travels 240 m in 30 s. Calculate the average speed.</p><p><strong>Step 1 — identify the quantities:</strong> distance = 240 m; time = 30 s; speed = ?</p><p><strong>Step 2 — choose the equation:</strong> speed = distance ÷ time, because distance and time are known.</p><p><strong>Step 3 — substitute:</strong> speed = 240 m ÷ 30 s.</p><p><strong>Step 4 — calculate:</strong> 240 ÷ 30 = 8.</p><p><strong>Step 5 — include units:</strong> average speed = <strong>8 m/s</strong>.</p><p><strong>Step 6 — check:</strong> 8 m/s × 30 s = 240 m, which matches the original distance.</p></div><div class="note-line" contenteditable="true"><h3>4. Graphs and diagrams</h3><p>On a distance–time graph, a steeper line means greater speed; a horizontal line means the object is stationary. On a velocity–time graph, gradient represents acceleration and area under the graph represents displacement (for a velocity graph with signed values).</p><p>Distance–time sketch: rising straight line = constant speed; flat line = stopped; changing gradient = changing speed.</p></div><div class="note-line" contenteditable="true"><h3>5. Questions to answer</h3><ol><li>A bus travels 360 m in 45 s. Calculate its average speed and show all working.</li><li>A runner moves at 4 m/s for 25 s. Calculate the distance travelled.</li><li>A journey of 150 m takes 30 s. Calculate the average speed in m/s.</li><li>What does a horizontal section of a distance–time graph mean? Explain.</li><li>Explain the difference between distance and displacement.</li></ol><details><summary>Suggested answers</summary><p>1. 360 ÷ 45 = 8 m/s. 2. 4 × 25 = 100 m. 3. 150 ÷ 30 = 5 m/s. 4. The object is stationary because distance does not change with time. 5. Distance is total path length; displacement is straight-line change in position with direction.</p></details></div><div class="note-line" contenteditable="true"><h3>6. Exam tips and common mistakes</h3><ul><li>Write the equation before substituting numbers.</li><li>Convert units first if the question mixes km, m, minutes or seconds.</li><li>Always include the unit in the final answer.</li><li>Do not confuse distance–time graph gradient with velocity–time graph gradient.</li><li>Average speed uses total distance divided by total time, including any stops unless the question says otherwise.</li></ul></div><div style="margin-top:16px;padding:14px;border:1px solid #e6e4f9;background:#faf9ff;border-radius:14px"><strong style="font-size:11px">Study tip block</strong><p class="sub" style="margin:7px 0 0">Your original writing stays yours. Use the demo tools to add prompts, sample explanations and formulas underneath it.</p></div></div></div></section>
+
+    <section class="page" id="page-guides"><div class="eyebrow">Mini digital textbooks</div><h1>Study Guides</h1><p class="sub">Whole-course structure: course → chapters → topics → concepts. Motion is a topic, not an entire Physics guide.</p><div class="grid grid-3 section" id="guidesGrid"></div></section>
+
+    <section class="page" id="page-lessons"><div class="eyebrow">Curated learning</div><h1>Lessons</h1><p class="sub">Short, focused lessons built around your syllabus, materials, weaknesses and goals.</p><div class="grid grid-3 section" id="lessonsGrid"></div></section>
+
+    <section class="page" id="page-practice"><div class="eyebrow">Assess, then adapt</div><h1>Practice</h1><p class="sub">Generate questions by subject, topic, difficulty and source — then let the result update the path.</p><div class="practice-builder section"><div class="practice-panel"><div class="field"><label>Subject</label><select class="select" id="practiceSubject"></select></div><div class="field" style="margin-top:10px"><label>Topic</label><select class="select" id="practiceTopic"><option>Mixed topics</option><option>Motion</option><option>Forces and momentum</option><option>Energy, work and power</option><option>Waves</option><option>Electricity</option></select></div><div class="field" style="margin-top:10px"><label>Difficulty</label><select class="select" id="practiceDifficulty"><option>Foundation</option><option selected>Standard</option><option>Challenging</option><option>Mixed</option></select></div><div class="field" style="margin-top:10px"><label>Questions</label><select class="select" id="practiceCount"><option>5</option><option selected>10</option><option>15</option></select></div><div class="field" style="margin-top:10px"><label>Source</label><select class="select" id="practiceSource"><option value="none">General syllabus practice</option></select></div><button class="primary" style="width:100%;margin-top:13px" data-action="generate-practice">Generate practice</button></div><div id="practiceArea"><div class="empty"><strong>Ready when you are.</strong><span>Choose your settings and generate a test.</span></div></div></div></section>
+
+    <section class="page" id="page-exam"><div class="eyebrow">Exam preparation</div><h1>Exam Prep</h1><p class="sub">Create a programme around the exam date, topic coverage, confidence and time you actually have.</p><div class="exam-hero section"><div class="field-grid"><div class="field"><label>Qualification</label><select class="select"><option>Cambridge IGCSE</option><option>Cambridge International AS Level</option><option>Cambridge International A Level</option></select></div><div class="field"><label>Subject</label><select class="select"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option></select></div><div class="field"><label>Exam date</label><input class="input" type="date" id="examDate"></div><div class="field"><label>Current confidence</label><select class="select"><option>Low</option><option selected>Medium</option><option>High</option></select></div></div><button class="primary" style="margin-top:14px" data-action="build-exam">Build my programme</button></div><div class="card section" id="examPlan"><div class="section-head"><div><h2>Example preparation path</h2><div class="sub">The plan changes as your performance changes.</div></div><span class="chip accent">Adaptive</span></div><div class="timeline"><div class="stage active"><strong>Foundations</strong><span>Close concept gaps and establish baseline understanding.</span></div><div class="stage"><strong>Graphs</strong><span>Read, interpret and construct exam-relevant graphs.</span></div><div class="stage"><strong>Calculations</strong><span>Build accuracy with formula selection and units.</span></div><div class="stage"><strong>Application</strong><span>Transfer knowledge to unfamiliar contexts.</span></div><div class="stage"><strong>Mixed papers</strong><span>Practise switching between topics under time pressure.</span></div></div></div></section>
+
+    <section class="page" id="page-planner"><div class="row"><div><div class="eyebrow">Your week</div><h1>Planner</h1><p class="sub">School timetable + available study time + exams + goals, in one adaptive schedule.</p></div><button class="primary" data-action="add-session">＋ Add session</button></div><div class="grid grid-2 section"><div class="card"><div class="section-head"><div><h2>Monday</h2><div class="sub">Today</div></div><span class="chip good">3 sessions</span></div><div id="mondayPlan"></div></div><div class="card"><div class="section-head"><div><h2>Weekly priorities</h2><div class="sub">Suggested from progress and goals.</div></div></div><div class="course-list"><div class="course-item"><div><strong>Waves practice</strong><span>39% mastery</span></div><span class="chip warn">Priority</span></div><div class="course-item"><div><strong>Forces calculations</strong><span>71% mastery</span></div><span class="chip">Maintain</span></div><div class="course-item"><div><strong>Physics baseline</strong><span>Due this week</span></div><span class="chip accent">Scheduled</span></div></div></div></div></section>
+
+    <section class="page" id="page-progress"><div class="row"><div><div class="eyebrow">Evidence over guessing</div><h1>Progress</h1><p class="sub">Every completed progress test adds a new point. Your progress is based on results, not a single mistake.</p></div><div class="toolbar"><select class="select" id="progressFilter" style="width:150px"><option>Overall</option><option>Physics</option><option>Chemistry</option><option>Mathematics</option></select><select class="select" id="progressRange" style="width:130px"><option>All time</option><option>3 months</option><option>30 days</option></select></div></div><div class="grid grid-4 section" id="progressStats"></div><div class="card chart-card section"><div class="section-head"><div><h2>Mastery trend</h2><div class="sub">New test results appear as new points.</div></div><span class="chip good">Live local history</span></div><svg class="chart" id="progressChart" viewBox="0 0 900 230" preserveAspectRatio="none"></svg><div class="chart-labels" id="chartLabels"></div></div><div class="grid grid-3 section" id="masteryCards"></div></section>
+
+    <section class="page" id="page-map"><div class="eyebrow">Your knowledge system</div><h1>Knowledge Map</h1><p class="sub">See where understanding is strong, developing or needs more evidence.</p><div class="map section" id="knowledgeMap"></div></section>
+
+    <section class="page" id="page-rewards"><div class="eyebrow">Consistency compounds</div><h1>Rewards</h1><p class="sub">XP, streaks, milestones and unlocks that recognise meaningful study progress.</p><div class="grid grid-4 section" id="rewardStats"></div><div class="grid grid-3 section" id="rewardsGrid"></div></section>
+
+    <section class="page" id="page-community"><div class="row"><div><div class="eyebrow">Student community</div><h1>Community</h1><p class="sub">Schoolwork, study tips, school life and subject discussions — kept school-appropriate.</p></div><button class="primary" data-action="new-post">＋ New post</button></div><div class="toolbar section"><button class="chip accent" data-filter="all">All</button><button class="chip" data-filter="#Mathematics">#Mathematics</button><button class="chip" data-filter="#Biology">#Biology</button><button class="chip" data-filter="#Year10">#Year10</button><button class="chip" data-filter="#StudyTips">#StudyTips</button><button class="chip" data-filter="#SchoolLife">#SchoolLife</button></div><div class="stack section" id="communityFeed"></div></section>
+
+    <section class="page" id="page-future"><div class="eyebrow">Interests → pathways</div><h1>Future</h1><p class="sub">Explore what interests you, connect it to subjects and skills, then investigate qualifications and possible career areas. You choose the direction.</p><div class="interest-search section"><span>⌕</span><input id="interestInput" placeholder="Search an interest, subject, activity, or something you're curious about…"><button class="primary" data-action="search-interest">Explore</button></div><div class="interest-suggest" id="interestSuggest"></div><div class="grid grid-3 section" id="futureResults"></div><div class="section"><div class="section-head"><div><h2>Not sure?</h2><div class="sub">Start broad, then narrow down as you learn what you like.</div></div></div><div class="grid grid-4" id="futureCategories"></div></div></section>
+
+    <section class="page" id="page-universities"><div class="eyebrow">Explore global options</div><h1>University Explorer</h1><p class="sub">Browse countries, popular course areas and universities to research. This is an illustrative starting list, not a ranking or admissions guarantee.</p><div class="grid grid-2 section"><div class="card"><div class="field"><label>Country</label><select class="select" id="uniCountry"><option value="United Kingdom">United Kingdom</option><option value="Malaysia">Malaysia</option><option value="United States">United States</option><option value="Canada">Canada</option><option value="Australia">Australia</option><option value="Singapore">Singapore</option><option value="Netherlands">Netherlands</option></select></div><div class="field" style="margin-top:12px"><label>Course interest</label><select class="select" id="uniCourse"><option>Computer Science</option><option>Medicine and Health</option><option>Engineering</option><option>Business and Economics</option><option>Law</option><option>Psychology</option><option>Design and Creative Arts</option><option>Environmental Science</option></select></div><button class="primary" style="margin-top:14px" id="findUniversities">Explore universities</button></div><div class="card" style="background:var(--accent-soft)"><h3>How to use this page</h3><p class="sub">Compare course modules, entry requirements, costs, scholarships, student support and application deadlines. Always verify details on the university's official website.</p><div class="chip">Research starter · not admissions advice</div></div></div><div id="universityResults" class="grid grid-3 section"></div></section>
+    <section class="page" id="page-teacher"><div class="eyebrow">Material-aware support</div><h1>AI Teacher</h1><p class="sub">Try sample tutor conversations. Live AI can be connected after the pitch prototype.</p><div class="teacher section"><aside class="teacher-side"><h3>Active material</h3><div id="teacherMaterials" class="stack" style="margin-top:10px"></div><div style="margin-top:15px" class="card tight"><div class="kicker">HOW IT WORKS</div><p class="small muted" style="margin:7px 0 0">Demo mode: the teacher replies with sample explanations. Connect an API later for live AI.</p></div></aside><div class="teacher-main"><div class="chat" id="chat"></div><div class="chat-box"><textarea id="chatInput" placeholder="Ask about a concept, an example, a calculation, or your uploaded material…"></textarea><button id="sendChat">➤</button></div></div></div></section>
+
+    <section class="page" id="page-pricing"><div class="eyebrow">StudyVerse membership</div><h1>Choose how you study</h1><p class="sub">Compare the proposed plans. Checkout is a demo only; payments and account entitlements are not connected on this static website.</p><div class="pricing-grid section"><article class="price-card"><div class="price-kicker">STANDARD</div><h2>StudyVerse</h2><p class="sub">A complete toolkit for organised everyday revision.</p><div class="price">RM17 <small>/ month</small></div><div class="annual">RM159 / year <span>Save RM45 vs monthly</span></div><ul><li>Editable notes and all paper templates</li><li>Pastel highlighter, marker and annotation tools</li><li>Detailed study guides and worked examples</li><li>Practice tests with answers and explanations</li><li>Planner, progress tracking and flashcards</li><li>Core study workspace</li></ul><button class="secondary choose-plan" data-plan="Standard monthly">Choose Standard monthly</button><button class="ghost choose-plan" data-plan="Standard yearly">Choose Standard yearly · RM159</button></article><article class="price-card pro"><div class="pro-ribbon">PRO · MOST POWERFUL</div><div class="price-kicker">PRO</div><h2>StudyVerse Pro</h2><p class="sub">More depth, structure and control for serious exam preparation.</p><div class="price">RM27 <small>/ month</small></div><div class="annual">RM201 / year <span>Pro annual plan</span></div><ul><li><strong>Everything in Standard</strong></li><li>Extended topic-by-topic study guide structure</li><li>Challenge mode and mixed-difficulty practice</li><li>Detailed answer walkthroughs and error review</li><li>Custom revision plans and exam countdown tools</li><li>Advanced note palettes and page styles</li><li>Progress insights and revision priorities</li><li>Priority feature access (planned)</li></ul><button class="primary choose-plan" data-plan="Pro monthly">Choose Pro monthly</button><button class="ghost choose-plan" data-plan="Pro yearly">Choose Pro yearly · RM201</button></article></div><div class="card section"><h3>What happens when you choose a plan?</h3><p class="sub">This prototype records your selection locally and shows a confirmation. It does not charge money, create a paid account or unlock secure server-side features. Before launch, connect a payment provider, authentication, subscription validation, privacy policy and cancellation/refund flows.</p><div id="planSelection" class="plan-selection">No plan selected yet.</div></div></section>
+    <section class="page" id="page-settings"><div class="eyebrow">Make StudyVerse yours</div><h1>Settings</h1><p class="sub">Your year, qualification, subjects, schedule and presentation preferences continuously shape the workspace.</p><div class="grid grid-2 section"><div class="card"><h3>Academic profile</h3><div class="field-grid" style="margin-top:12px"><div class="field"><label>Year</label><select class="select" id="setYear"><option>Year 10</option><option>Year 11</option><option>Year 12 / Lower Sixth</option><option>Year 13 / Upper Sixth</option></select></div><div class="field"><label>Qualification</label><select class="select" id="setQual"><option>Cambridge IGCSE</option><option>Cambridge International AS Level</option><option>Cambridge International A Level</option><option>Other</option></select></div></div><div class="field" style="margin-top:12px"><label>Progress test frequency</label><select class="select" id="setFreq"><option>Weekly</option><option>Every 2 weeks</option><option>Monthly</option><option>Custom</option></select></div><button class="primary" style="margin-top:13px" data-action="save-settings">Save profile</button></div><div class="card"><h3>Workspace style</h3><div class="field-grid" style="margin-top:12px"><div class="field"><label>Paper</label><select class="select"><option>Plain</option><option>Lined</option><option>Grid</option><option>Dot grid</option><option>Cornell</option><option>Graph</option><option>Custom</option></select></div><div class="field"><label>Style</label><select class="select"><option>Minimal</option><option>Academic</option><option>Notebook</option><option>Pastel</option><option>Dark mode</option><option>Colourful</option></select></div></div><div class="field" style="margin-top:12px"><label>Page colour</label><select class="select"><option>White</option><option>Cream</option><option>Black</option><option>Dark grey</option><option>Lavender</option><option>Mint</option></select></div></div></div></section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop"><div class="modal" id="modal"><div class="modal-head"><div class="modal-title" id="modalTitle">StudyVerse</div><button class="close" id="closeModal">×</button></div><div id="modalBody"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const API_BASE = (window.STUDYVERSE_API_BASE || '').replace(/\/$/, '');
+  const state = {
+    materials: [],
+    selectedMaterialId: null,
+    chat: JSON.parse(localStorage.getItem('sv-chat') || '[]'),
+    progress: JSON.parse(localStorage.getItem('sv-progress') || 'null') || [
+      {label:'Baseline', value:62}, {label:'Test 1', value:66}, {label:'Test 2', value:70}, {label:'Test 3', value:73}, {label:'Test 4', value:78}
+    ],
+    profile: JSON.parse(localStorage.getItem('sv-profile') || 'null') || {
+      year:'Year 10', qualification:'Cambridge IGCSE', frequency:'Weekly', subjects:['Mathematics','Biology','Chemistry','Physics','English Language','English Literature','Computer Science']
+    },
+    community: [
+      {name:'Maya', initials:'MY', time:'12m', tag:'#StudyTips', text:'How do you decide what belongs on a one-page revision sheet? I keep writing everything down.', likes:18, replies:4},
+      {name:'Noah', initials:'NO', time:'31m', tag:'#Physics', text:'What is your best way of remembering which motion graph gradient represents what?', likes:11, replies:6},
+      {name:'Aisha', initials:'AI', time:'1h', tag:'#SchoolLife', text:'How does everyone balance homework with revision when several deadlines land together?', likes:24, replies:8},
+      {name:'Ethan', initials:'ET', time:'2h', tag:'#Mathematics', text:'I finally understood why completing the square changes the form but not the graph. Tiny win.', likes:31, replies:5}
+    ],
+    careerResults: []
+  };
+
+  const subjects = [
+    ['Mathematics','∑','86%','Algebra, geometry, trigonometry, statistics'],['English Language','Aa','78%','Reading, analysis, writing, accuracy'],['English Literature','✦','74%','Character, themes, language, context'],['Biology','⌬','81%','Cells, enzymes, inheritance, ecology'],['Chemistry','⚗','69%','Bonding, energetics, rates, organic'],['Physics','ϟ','73%','Motion, forces, waves, electricity'],['Computer Science','</>','64%','Algorithms, data, programming'],['History','◫','71%','Causes, consequences, interpretations'],['Geography','⌁','67%','Physical, human, case studies'],['Business','◇','62%','Operations, marketing, finance'],['Economics','₤','58%','Markets, macroeconomics, policy'],['French','文','76%','Grammar, topics, translation'],['Spanish','ñ','70%','Grammar, topics, speaking, writing']
+  ];
+
+  const guides = {
+    'Physics':['Motion','Forces and momentum','Energy, work and power','Thermal physics','Waves','Electricity','Magnetism and electromagnetism','Nuclear physics','Space physics'],
+    'Chemistry':['Atomic structure','Bonding','Stoichiometry','Energetics','Rates of reaction','Equilibrium','Acids, bases and salts','Periodic chemistry','Organic chemistry','Chemical analysis'],
+    'Biology':['Cell biology','Organisation','Movement in and out of cells','Biological molecules','Enzymes','Plant nutrition','Human nutrition','Transport','Coordination and response','Reproduction','Inheritance','Ecology','Human influences','Practical biology'],
+    'Mathematics':['Number','Algebra and graphs','Equations and inequalities','Geometry','Mensuration','Trigonometry','Vectors','Probability','Statistics','Functions and sequences'],
+    'English Language':['Reading comprehension','Language analysis','Structure and effects','Writer’s viewpoint','Directed writing','Descriptive writing','Narrative writing','Argument and persuasion','Editing and accuracy','Exam strategy'],
+    'English Literature':['Reading methods','Character','Themes','Language','Structure','Context','Writer’s choices','Comparative analysis','Essay construction','Exam strategy'],
+    'French':['Identity and relationships','School and education','Free time and interests','Food and health','Home and local area','Travel','Technology and media','Work and future plans','Environment','Grammar and tenses','Translation','Exam strategies']
+  };
+
+  const careerCategories = ['Science & discovery','Technology','Creative','Business','People & society','Health','Environment','Media & communication','Practical/technical','Sport & performance','Other'];
+  const careerMap = {
+    'space':['Astronomy','Space exploration','Physics','Engineering','Satellites'],
+    'helping people':['Healthcare','Psychology','Education','Social work','Human services'],
+    'computers':['Computer Science','Programming','AI','Cybersecurity','Software'],
+    'technology':['Computer Science','Engineering','AI','Product design','Robotics'],
+    'animals':['Biology','Veterinary science','Ecology','Zoology','Conservation'],
+    'business':['Economics','Finance','Marketing','Entrepreneurship','Management'],
+    'writing':['English Language','Journalism','Publishing','Communications','Law'],
+    'art':['Design','Illustration','Animation','Architecture','Creative media'],
+    'medicine':['Biology','Chemistry','Healthcare','Biomedical science','Medicine']
+  };
+
+  const pageEls = [...document.querySelectorAll('.page')];
+  const navBtns = [...document.querySelectorAll('.nav-btn')];
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+  const toastEl = document.getElementById('toast');
+
+  function toast(message){
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toastEl.classList.remove('show'), 2400);
+  }
+
+  function escapeHtml(value){
+    return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  }
+
+  function renderMarkdown(md){
+    let text = escapeHtml(md).replace(/\r/g,'');
+    text = text.replace(/```([\s\S]*?)```/g, '<pre style="background:#17181d;color:#fff;padding:12px;border-radius:11px;overflow:auto;font-size:10px">$1</pre>');
+    text = text.replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>').replace(/^# (.*)$/gm,'<h1>$1</h1>');
+    text = text.replace(/^\- (.*)$/gm,'<li>$1</li>').replace(/(<li>.*<\/li>\n?)+/g, block => `<ul>${block}</ul>`);
+    text = text.replace(/^(\d+)\. (.*)$/gm,'<li>$2</li>');
+    text = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>');
+    text = text.split(/\n{2,}/).map(part => /<h[1-3]>|<ul>|<pre>/.test(part.trim()) ? part : `<p>${part.replace(/\n/g,'<br>')}</p>`).join('');
+    return text;
+  }
+
+  function save(){
+    localStorage.setItem('sv-progress', JSON.stringify(state.progress));
+    localStorage.setItem('sv-profile', JSON.stringify(state.profile));
+    localStorage.setItem('sv-chat', JSON.stringify(state.chat.slice(-40)));
+  }
+
+  function setPage(page){
+    pageEls.forEach(el => el.classList.toggle('active', el.id === `page-${page}`));
+    navBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.page === page));
+    document.getElementById('sidebar').classList.remove('open');
+    if(page === 'progress') renderProgress();
+    if(page === 'map') renderMap();
+    if(page === 'rewards') renderRewards();
+    if(page === 'community') renderCommunity('all');
+    if(page === 'teacher') renderTeacherMaterials();
+  }
+
+  navBtns.forEach(btn => btn.addEventListener('click', () => setPage(btn.dataset.page)));
+  document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => setPage(el.dataset.go)));
+  document.getElementById('mobileMenu').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+
+  function openModal(title, html){ modalTitle.textContent = title; modalBody.innerHTML = html; modalBackdrop.classList.add('open'); }
+  function closeModal(){ modalBackdrop.classList.remove('open'); modalBody.innerHTML = ''; }
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', e => { if(e.target === modalBackdrop) closeModal(); });
+
+  // Shark Tank demo mode: no API key, external AI calls, or server required.
+  const DEMO_MATERIALS_KEY='sv-demo-materials';
+  function readDemoMaterials(){try{return JSON.parse(localStorage.getItem(DEMO_MATERIALS_KEY)||'[]')}catch{return []}}
+  function writeDemoMaterials(items){localStorage.setItem(DEMO_MATERIALS_KEY,JSON.stringify(items))}
+  function sampleContent(subject,title,kind){
+    const topic=(title||'Core concepts').replace(/[_-]/g,' ');
+    const bank={
+      'Mathematics':['**Key idea:** Identify the information given and what the question asks.','**Method:** Choose a suitable rule, show each step, and check the answer.','**Worked example:** If 3x + 5 = 20, subtract 5 to get 3x = 15, then divide by 3: x = 5.','**Common mistake:** Changing one side of an equation without doing the same to the other side.','**Revision tip:** Practise a mix of questions and write down why each method works.'],
+      'Biology':['**Key idea:** Biological structures are adapted to their functions.','**Key term:** Diffusion is the net movement of particles from a region of higher concentration to lower concentration.','**Process:** Describe what happens in the correct order and use precise scientific vocabulary.','**Common mistake:** Naming a process without explaining how it leads to the result.','**Revision tip:** Link structure → process → effect.'],
+      'Chemistry':['**Key idea:** Chemical behaviour depends on particles, bonding and energy changes.','**Key term:** An element contains only one type of atom.','**Method:** Balance equations by changing coefficients, not the formula subscripts.','**Common mistake:** Forgetting that atoms are conserved in a chemical reaction.','**Revision tip:** Practise symbol equations and explain observations using particles.'],
+      'Physics':['**Key idea:** Identify the physical quantities and their units before selecting an equation.','**Formula:** speed = distance ÷ time.','**Method:** Substitute values, calculate carefully and include the correct unit.','**Graph tip:** A gradient represents the rate of change between the quantities on the axes.','**Common mistake:** Mixing up distance–time and velocity–time graph interpretations.'],
+      'Computer Science':['**Key idea:** Break a problem into smaller, testable steps.','**Key term:** An algorithm is a finite sequence of steps used to solve a problem.','**Method:** Trace variables carefully through selection, iteration and sequence.','**Common mistake:** Testing only the normal case instead of boundary and invalid inputs.','**Revision tip:** Use a trace table and explain why each output occurs.'],
+      'History':['**Key idea:** Build explanations around causes, events and consequences.','**Method:** Make a clear point, support it with precise evidence, and explain its significance.','**Source skills:** Consider content, context, purpose and what the source can or cannot show.','**Common mistake:** Describing events without answering the question about importance.','**Revision tip:** Compare factors and make a supported judgement.'],
+      'English Language':['**Key idea:** Analyse how a writer’s choices shape meaning and reader response.','**Method:** Identify a specific choice, select short evidence, and explain its effect in context.','**Writing tip:** Adapt tone, structure and vocabulary to audience and purpose.','**Common mistake:** Naming a technique without analysing its effect.','**Revision tip:** Make every paragraph support the task.'],
+      'English Literature':['**Key idea:** Develop an interpretation using evidence from the text.','**Method:** Point → evidence → analysis → link to the question.','**Context:** Include context when it strengthens your interpretation, not as a separate fact dump.','**Common mistake:** Retelling the plot instead of analysing a writer’s choices.','**Revision tip:** Track how characters and themes change across the text.'],
+      'Geography':['**Key idea:** Explain processes and link them to impacts at different scales.','**Method:** Use named place evidence where relevant, then explain how it supports the point.','**Skill:** Read the title, key, units and scale before interpreting a map or graph.','**Common mistake:** Listing impacts without explaining the causal links.','**Revision tip:** Practise case-study facts and process diagrams.'],
+      'Business':['**Key idea:** Apply business concepts to the specific organisation and context.','**Method:** Point → application → analysis → justified conclusion.','**Key term:** Revenue is the money earned from sales before costs are deducted.','**Common mistake:** Giving generic answers without using the scenario.','**Revision tip:** Explain both benefits and drawbacks before making a judgement.'],
+      'Economics':['**Key idea:** Explain how incentives, scarcity and choices affect decisions.','**Method:** Define the concept, explain the chain of effects and evaluate conditions.','**Graph tip:** Label axes, curves and equilibrium clearly.','**Common mistake:** Assuming a policy has the same effect in every context.','**Revision tip:** Include short-run and long-run considerations where relevant.']
+    };
+    const lines=bank[subject]||['**Key idea:** Define the central concept clearly and use accurate subject vocabulary.','**Method:** Break the topic into smaller steps and connect each step to the question.','**Example:** Apply the concept to a concrete case and explain why it fits.','**Common mistake:** Memorising a phrase without understanding when it applies.','**Revision tip:** Use retrieval practice, spaced review and a short self-test.'];
+    if(kind==='summary') return `# ${subject}: ${topic} — Summary\n\n${lines.slice(0,4).join('\n\n')}\n\n## Check your understanding\nExplain the key idea without looking at the notes.`;
+    return `# ${subject} — ${topic}\n\n${lines.join('\n\n')}\n\n## Know this ✦\n- Explain the main idea in your own words.\n- Apply it to a new example.\n- Check terminology, steps and units.\n\n*Sample content for the StudyVerse Shark Tank demo; replace with curriculum-specific material before real study use.*`;
+  }
+  async function api(path, options = {}){
+    await new Promise(r=>setTimeout(r,180));
+    const method=(options.method||'GET').toUpperCase();
+    if(path==='/api/health') return {ok:true,aiConfigured:false,mode:'demo'};
+    if(path==='/api/materials'&&method==='GET') return {materials:readDemoMaterials()};
+    if(path==='/api/materials'&&method==='POST'){
+      const form=options.body; const file=form?.get?.('file');
+      if(!file) throw new Error('Choose a file to upload.');
+      const item={id:'demo-'+Date.now(),title:form.get('title')||file.name.replace(/\.[^.]+$/,''),fileName:file.name,subject:form.get('subject')||state.profile.subjects[0]||'General',kind:file.type.startsWith('image/')?'image':'document',status:'ready',createdAt:new Date().toISOString(),demo:true};
+      const all=readDemoMaterials();all.unshift(item);writeDemoMaterials(all);return {material:item};
+    }
+    if(path.startsWith('/api/materials/')&&method==='DELETE'){const id=decodeURIComponent(path.split('/').pop());writeDemoMaterials(readDemoMaterials().filter(m=>m.id!==id));return {ok:true};}
+    const payload=options.body?JSON.parse(options.body):{};
+    if(path==='/api/ai/summary'||path==='/api/ai/notes'){const m=readDemoMaterials().find(x=>x.id===payload.materialId);if(!m)throw new Error('Demo material not found.');return {content:sampleContent(m.subject,m.title,path.endsWith('summary')?'summary':'notes')};}
+    if(path==='/api/ai/flashcards') return {cards:[{front:'What is the main idea of this topic?',back:'Explain the central concept in your own words.'},{front:'What is a common mistake?',back:'Memorising a rule without understanding when and why it applies.'},{front:'How can you check your understanding?',back:'Retrieve the idea from memory, then apply it to a new example.'},{front:'What should a strong exam answer include?',back:'Accurate terminology, relevant evidence and a clear explanation.'}]};
+    if(path==='/api/ai/practice') return {questions:[{question:'Which approach is best when answering a new subject question?',options:['Identify what is being asked, choose a suitable method and check the result.','Write every fact you remember, whether relevant or not.','Skip the working and guess from the topic title.','Use a memorised answer even if the question is different.'],answerIndex:0,explanation:'A strong answer responds to the exact task, shows a justified method and checks accuracy.'},{question:'What should you do after making a mistake in practice?',options:['Review the reasoning and try a similar question.','Ignore it completely.','Memorise only the final answer.','Stop revising that subject.'],answerIndex:0,explanation:'Understanding the cause of an error helps you apply the right method next time.'}]};
+    if(path==='/api/teacher'){const msgs=payload.messages||[];const q=(msgs[msgs.length-1]?.content||'').toLowerCase();let content='Let’s break this down into a definition, an example and a quick check. First, identify the key idea in the question. Then connect it to the relevant rule or evidence, and explain each step. Can you try explaining the first step in your own words?';if(q.includes('photosynthesis'))content='Photosynthesis is the process plants use to transfer light energy into chemical energy stored in glucose. It uses carbon dioxide and water, with light energy absorbed by chlorophyll, and releases oxygen. Quick check: why is light needed?';else if(q.includes('equation')||q.includes('math')||q.includes('solve'))content='For an equation, keep both sides balanced. Undo addition or subtraction first, then multiplication or division. Example: 3x + 5 = 20 → 3x = 15 → x = 5. Check by substituting 5 into the original equation.';else if(q.includes('career')||q.includes('university'))content='Start with what you enjoy, then compare the skills and subjects needed for different pathways. Course requirements vary by country and university, so use this demo as a starting point and verify details with official sources.';return {content};}
+    throw new Error('This demo action is not available yet.');
+  }
+
+  function subjectOptions(){ return subjects.map(([name]) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join(''); }
+
+  function renderHome(){
+    document.getElementById('homeStats').innerHTML = [
+      ['Current mastery','73%','Across your tracked learning'],['XP','2,840','+320 this week'],['Study streak','8 days','Consistency goal: 10'],['Material library',`${state.materials.length}`,'Uploaded study sources']
+    ].map(([label,value,foot]) => `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div><div class="foot">${foot}</div></div>`).join('');
+    const cont = [
+      ['Physics','Waves','39% mastery','Practise priority'],['Chemistry','Rates of reaction','69% mastery','Continue lesson'],['Mathematics','Functions and sequences','82% mastery','Quick review']
+    ];
+    document.getElementById('continueList').innerHTML = cont.map(([s,t,m,a]) => `<div class="course-item"><div><strong>${s} · ${t}</strong><span>${m}</span></div><span class="chip ${m.startsWith('39')?'warn':'accent'}">${a}</span></div>`).join('');
+    document.getElementById('homeSubjects').innerHTML = subjects.filter(([name])=>state.profile.subjects.includes(name)).slice(0,8).map(([name,icon,pct]) => subjectCard(name, icon, pct)).join('');
+  }
+
+  function subjectCard(name, icon, pct){
+    return `<button class="subject-card" data-subject="${escapeHtml(name)}" style="text-align:left"><div class="subject-top"><div class="subject-icon">${icon}</div><span class="chip">${pct}</span></div><div><strong style="font-size:12px">${escapeHtml(name)}</strong><div class="sub" style="font-size:9px;margin-top:4px">Personalized learning path</div></div><div class="progressbar"><span style="width:${parseInt(pct,10)}%"></span></div></button>`;
+  }
+
+  function renderSubjects(){
+    document.getElementById('subjectsGrid').innerHTML = subjects.filter(([name])=>state.profile.subjects.includes(name)).map(([name,icon,pct,desc]) => `<button class="subject-card" data-subject="${escapeHtml(name)}" style="text-align:left"><div class="subject-top"><div class="subject-icon">${icon}</div><span class="chip accent">${pct}</span></div><div><strong style="font-size:13px">${escapeHtml(name)}</strong><div class="sub" style="font-size:10px;margin-top:4px">${escapeHtml(desc)}</div></div><div class="progressbar"><span style="width:${parseInt(pct,10)}%"></span></div></button>`).join('');
+    const chosen=document.getElementById('selectedSubjects');if(chosen)chosen.innerHTML=state.profile.subjects.map(n=>`<span class="chip accent">${escapeHtml(n)}</span>`).join(' ')||'<span class="sub">No subjects selected yet.</span>';
+    document.querySelectorAll('[data-subject]').forEach(btn => btn.addEventListener('click', () => {
+      const name = btn.dataset.subject;
+      const chapters = guides[name] || ['Course overview','Core concepts','Skills and application','Exam technique'];
+      setPage('guides');
+      if(guides[name]) showGuide(name, 0); else toast(`${name} course guide ready to build from your material.`);
+    }));
+  }
+
+  function renderMaterials(){
+    const filter = document.getElementById('materialFilter').value;
+    const items = state.materials.filter(m => filter === 'all' || m.subject === filter);
+    document.getElementById('materialCount').textContent = state.materials.length ? `${state.materials.length} material${state.materials.length===1?'':'s'} in your workspace.` : 'No materials yet. Upload your first source.';
+    document.getElementById('materialsGrid').innerHTML = items.length ? items.map(m => {
+      const kind = m.kind === 'image' ? 'image' : (m.fileName.split('.').pop() || 'file').toUpperCase();
+      return `<div class="card material-card"><div class="row"><div class="material-icon">${m.kind==='image'?'▧':'▤'}</div><span class="chip ${m.status==='ready'?'good':'warn'}">${m.status==='ready'?'Ready':'Processing'}</span></div><div><strong style="font-size:12px">${escapeHtml(m.title || m.fileName)}</strong><div class="sub" style="font-size:9px;margin-top:3px">${escapeHtml(m.subject)} · ${kind}</div></div><div class="material-actions"><button class="mini-btn" data-ai="summary" data-id="${m.id}">AI Summary</button><button class="mini-btn" data-ai="notes" data-id="${m.id}">AI Notes</button><button class="mini-btn" data-ai="flashcards" data-id="${m.id}">Flashcards</button><button class="mini-btn" data-ai="practice" data-id="${m.id}">AI Practice</button><button class="mini-btn" data-teacher="${m.id}">Ask AI Teacher</button><button class="mini-btn" data-delete="${m.id}">Delete</button></div></div>`;
+    }).join('') : `<div class="empty" style="grid-column:1/-1"><strong>Your library is empty.</strong><span>Upload a coursebook, worksheet, revision guide, note or photo to start.</span></div>`;
+    document.querySelectorAll('[data-ai]').forEach(btn => btn.addEventListener('click', () => generateAI(btn.dataset.ai, btn.dataset.id)));
+    document.querySelectorAll('[data-teacher]').forEach(btn => btn.addEventListener('click', () => { state.selectedMaterialId = btn.dataset.teacher; save(); setPage('teacher'); renderTeacherMaterials(); }));
+    document.querySelectorAll('[data-delete]').forEach(btn => btn.addEventListener('click', () => deleteMaterial(btn.dataset.delete)));
+    renderPracticeSources();
+  }
+
+  async function loadMaterials(){
+    try{ const data = await api('/api/materials'); state.materials = Array.isArray(data.materials) ? data.materials : []; }
+    catch(err){ state.materials = []; toast(err.message); }
+    renderMaterials(); renderHome(); renderTeacherMaterials();
+  }
+
+  function uploadDialog(){
+    const html = `<div class="field-grid"><div class="field"><label>Subject</label><select class="select" id="uploadSubject">${subjectOptions()}</select></div><div class="field"><label>Title (optional)</label><input class="input" id="uploadTitle" placeholder="e.g. Physics Coursebook — Chapter 4"></div></div><div class="card tight" style="margin-top:12px;background:#fafaff"><div class="small"><strong>This demo will add the file name to your library and show sample study resources. No file is sent to a server.</div></div><div style="display:flex;justify-content:flex-end;margin-top:14px;gap:8px"><button class="secondary" id="cancelUpload">Cancel</button><button class="primary" id="confirmUpload">Choose file</button></div>`;
+    openModal('Add study material', html);
+    document.getElementById('cancelUpload').addEventListener('click', closeModal);
+    document.getElementById('confirmUpload').addEventListener('click', () => { const subject=document.getElementById('uploadSubject').value; const title=document.getElementById('uploadTitle').value.trim(); closeModal(); const input=document.getElementById('materialInput'); input.dataset.subject=subject; input.dataset.title=title; input.click(); });
+  }
+
+  async function handleUpload(file, subject, title){
+    if(!file) return;
+    const form = new FormData();
+    form.append('file', file);
+    form.append('subject', subject || state.profile.subjects[0] || 'General');
+    form.append('title', title || file.name.replace(/\.[^/.]+$/,''));
+    openModal('Uploading material', `<div class="loading"><span class="spin"></span><span>Adding your file to the local demo library…</span></div>`);
+    try{
+      const data = await api('/api/materials', {method:'POST', body:form});
+      closeModal();
+      toast('File added to the demo library. Sample resources are available.');
+      await loadMaterials();
+      openMaterialReady(data.material);
+    }catch(err){ closeModal(); toast(err.message); }
+  }
+
+  function openMaterialReady(material){
+    openModal('Material ready', `<div class="stack"><div class="card tight"><strong>${escapeHtml(material.title)}</strong><div class="sub" style="font-size:9px;margin-top:3px">${escapeHtml(material.subject)}</div></div><div class="grid grid-2"><button class="primary" id="readySummary">AI Summary</button><button class="secondary" id="readyNotes">AI Notes</button><button class="secondary" id="readyCards">Flashcards</button><button class="secondary" id="readyPractice">AI Practice</button></div></div>`);
+    document.getElementById('readySummary').onclick=()=>generateAI('summary',material.id);
+    document.getElementById('readyNotes').onclick=()=>generateAI('notes',material.id);
+    document.getElementById('readyCards').onclick=()=>generateAI('flashcards',material.id);
+    document.getElementById('readyPractice').onclick=()=>generateAI('practice',material.id);
+  }
+
+  async function deleteMaterial(id){
+    if(!confirm('Delete this material from StudyVerse?')) return;
+    try{ await api(`/api/materials/${encodeURIComponent(id)}`,{method:'DELETE'}); if(state.selectedMaterialId===id) state.selectedMaterialId=null; toast('Material deleted.'); await loadMaterials(); }
+    catch(err){ toast(err.message); }
+  }
+
+  async function generateAI(kind, id){
+    const material = state.materials.find(m => m.id === id); if(!material) return;
+    closeModal();
+    const titles={summary:'AI Summary',notes:'AI Notes',flashcards:'AI Flashcards',practice:'AI Practice'};
+    openModal(titles[kind], `<div class="loading"><span class="spin"></span><span>StudyVerse is reading your source and building this resource…</span></div>`);
+    try{
+      let data;
+      if(kind==='summary') data = await api('/api/ai/summary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({materialId:id,depth:'Standard revision notes',style:'Revision',include:['Definitions','Examples','Exam tips','Common mistakes','Key terminology']})});
+      if(kind==='notes') data = await api('/api/ai/notes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({materialId:id,depth:'Detailed',style:'Exam-focused',include:['Definitions','Examples','Worked solutions','Diagrams','Tables/comparisons','Exam tips','Common mistakes','Key terminology']})});
+      if(kind==='flashcards') data = await api('/api/ai/flashcards',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({materialId:id,count:12})});
+      if(kind==='practice') data = await api('/api/ai/practice',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({materialId:id,subject:material.subject,topic:'Mixed topics',difficulty:'Mixed',count:10})});
+      if(kind==='flashcards') renderFlashcards(data);
+      else if(kind==='practice') renderGeneratedPractice(data);
+      else modalBody.innerHTML = `<div class="output">${renderMarkdown(data.content || data.text || '')}</div><div style="display:flex;justify-content:flex-end;margin-top:15px"><button class="secondary" id="saveAiResource">Save to Notes</button></div>`;
+      document.getElementById('saveAiResource')?.addEventListener('click',()=>{closeModal();setPage('notes');toast('Resource is ready to add to your notes.');});
+    }catch(err){ modalBody.innerHTML=`<div class="card" style="background:var(--danger-soft);border-color:#f0cccc"><strong>Demo resource unavailable</strong><p class="sub" style="margin:6px 0 0">${escapeHtml(err.message)}</p></div><div style="margin-top:12px"><button class="secondary" id="closeAiError">Close</button></div>`; document.getElementById('closeAiError').onclick=closeModal; }
+  }
+
+  function renderFlashcards(data){
+    const cards = Array.isArray(data.cards) ? data.cards : [];
+    let idx=0;
+    const draw=()=>{ const c=cards[idx]; if(!c){ modalBody.innerHTML='<div class="empty"><strong>No cards returned.</strong><span>Try generating them again.</span></div>';return;} modalBody.innerHTML=`<div class="card" style="min-height:220px;display:flex;flex-direction:column;justify-content:space-between"><div><span class="chip accent">Card ${idx+1} / ${cards.length}</span><h2 style="margin-top:16px">${escapeHtml(c.front || c.question || '')}</h2><p class="sub" style="min-height:50px">Tap reveal to check the answer.</p></div><button class="primary" id="revealCard">Reveal answer</button></div>`; document.getElementById('revealCard').onclick=()=>{ modalBody.querySelector('.card').innerHTML=`<div><span class="chip good">Answer</span><div style="font-size:13px;line-height:1.7;margin-top:15px">${escapeHtml(c.back || c.answer || '')}</div></div><div class="test-actions"><button class="secondary" id="nextCard">Next card</button><button class="ghost" id="closeCards">Close</button></div>`; document.getElementById('nextCard').onclick=()=>{idx++;draw()}; document.getElementById('closeCards').onclick=closeModal;}; };
+    draw();
+  }
+
+  function renderGeneratedPractice(data){
+    const qs = Array.isArray(data.questions) ? data.questions : [];
+    if(!qs.length){modalBody.innerHTML='<div class="empty"><strong>No questions returned.</strong><span>Try again with a different source.</span></div>';return;}
+    modalBody.innerHTML = `<div class="sub" style="margin-bottom:12px">${qs.length} source-based questions. Complete them, then submit to analyse your pattern.</div><div class="stack" id="generatedQs">${qs.map((q,i)=>`<div class="question-card"><div class="kicker">QUESTION ${i+1}</div><div class="question">${escapeHtml(q.question)}</div>${(q.options||[]).map((o,j)=>`<label class="option"><input type="radio" name="gq${i}" value="${j}"><span>${escapeHtml(o)}</span></label>`).join('')}</div>`).join('')}</div><div class="test-actions"><button class="primary" id="submitGenerated">Submit test</button><button class="secondary" id="closeGenerated">Close</button></div><div id="generatedResult"></div>`;
+    document.getElementById('closeGenerated').onclick=closeModal;
+    document.getElementById('submitGenerated').onclick=()=>{let correct=0;qs.forEach((q,i)=>{const chosen=document.querySelector(`input[name="gq${i}"]:checked`);if(chosen && Number(chosen.value)===Number(q.answerIndex))correct++;});const pct=Math.round(correct/qs.length*100);state.progress.push({label:`AI ${new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'})}`,value:pct});save();document.getElementById('generatedResult').innerHTML=`<div class="card" style="margin-top:13px;background:${pct>=70?'var(--good-soft)':'var(--warn-soft)'}"><strong>${pct}%</strong><div class="sub" style="font-size:10px;margin-top:4px">${correct}/${qs.length} correct. This result has been added to your progress trend.</div></div>`;toast('Practice result added to progress.');};
+  }
+
+  function renderPracticeSources(){
+    const source = document.getElementById('practiceSource');
+    if(!source) return;
+    source.innerHTML = `<option value="none">General syllabus practice</option>` + state.materials.map(m=>`<option value="${escapeHtml(m.id)}">${escapeHtml(m.title)}</option>`).join('');
+  }
+
+  function renderGuides(){
+    document.getElementById('guidesGrid').innerHTML = Object.entries(guides).map(([name,chapters])=>`<div class="card guide-card"><div class="row"><div><h3>${escapeHtml(name)}</h3><div class="guide-count">Whole-course guide · ${chapters.length} chapters</div></div><span class="chip accent">Open</span></div><div class="guide-chapters">${chapters.slice(0,6).map((c,i)=>`<button data-guide="${escapeHtml(name)}" data-chapter="${i}">${i+1}. ${escapeHtml(c)}</button>`).join('')}</div><div class="row" style="margin-top:11px"><button class="secondary" data-guide-open="${escapeHtml(name)}">Open demo guide</button><span class="kicker">COURSE → TOPICS</span></div></div>`).join('');
+    document.querySelectorAll('[data-guide]').forEach(btn=>btn.addEventListener('click',()=>showGuide(btn.dataset.guide,Number(btn.dataset.chapter))));
+    document.querySelectorAll('[data-guide-open]').forEach(btn=>btn.addEventListener('click',()=>showGuide(btn.dataset.guide,0)));
+  }
+
+  function showGuide(name, index){
+    const chapters=guides[name]||[]; if(!chapters.length)return;
+    const content = guideChapterContent(name, chapters[index], index, chapters.length);
+    openModal(`${name} · Study Guide`, `<div class="study-grid"><div class="chapter-nav">${chapters.map((c,i)=>`<button class="${i===index?'active':''}" data-modal-chapter="${i}">${i+1}. ${escapeHtml(c)}</button>`).join('')}</div><div class="guide-content">${content}</div></div>`);
+    document.querySelectorAll('[data-modal-chapter]').forEach(btn=>btn.addEventListener('click',()=>showGuide(name,Number(btn.dataset.modalChapter))));
+  }
+
+  function guideChapterContent(subject, chapter, index, total){
+    const isPhysics=subject==='Physics' && /motion|speed|velocity|acceleration|graph/i.test(chapter);
+    const isMath=subject==='Mathematics';
+    const definition=isPhysics?'Motion is a change in an object’s position over time. Distance is the total path travelled; displacement is the straight-line change in position with direction. Speed is distance travelled per unit time, while velocity is speed in a stated direction.':isMath?'A mathematical method is a sequence of valid steps that transforms given information into a result. A strong solution identifies the relevant rule, applies it consistently and checks whether the answer fits the original problem.':`${chapter} is a core ${subject} topic. Start by learning a precise definition, then understand the process or relationship behind it and practise applying it to unfamiliar examples. The strongest revision connects key terms, evidence, diagrams or calculations rather than memorising isolated statements.`;
+    const worked=isPhysics?'Worked example: a cyclist travels 240 m in 30 s. Step 1: write the equation, speed = distance ÷ time. Step 2: substitute, speed = 240 ÷ 30. Step 3: calculate, speed = 8. Step 4: include the unit, 8 m/s. Check: 8 m/s for 30 s gives 240 m, so the answer is reasonable.':isMath?'Worked example: solve 4x − 7 = 21. Add 7 to both sides: 4x = 28. Divide both sides by 4: x = 7. Check in the original: 4(7) − 7 = 28 − 7 = 21, so the solution is correct.':'Worked approach: (1) underline the command word and topic; (2) state the relevant definition or principle; (3) choose a specific example, data point or piece of evidence; (4) explain each link in the reasoning; (5) finish by directly answering the question and checking accuracy.';
+    const questions=isPhysics?['A bus travels 360 m in 45 s. Calculate its average speed and show the equation.','A distance–time graph becomes horizontal. Describe the motion and explain your reasoning.','A velocity changes from 6 m/s to 18 m/s in 4 s. Calculate acceleration.']:isMath?['Solve 5x + 4 = 29. Show each inverse operation.','Expand and simplify 3(2x − 4) + x.','A rectangle is 9 cm long and 4 cm wide. Calculate its area and perimeter.']:['Write the definition of the key term without looking at the guide.','Apply the idea to a new example and explain each step.','Explain one common misconception and how you would correct it.'];
+    return `<div class="eyebrow">CHAPTER ${index+1} OF ${total} · REVISION GUIDE</div><h2>${escapeHtml(chapter)}</h2><p>This is a structured study chapter for active revision. Read a section, cover it, retrieve the main idea from memory, and then test yourself before moving on.</p><h3>1. Definition — what is it?</h3><p>${escapeHtml(definition)}</p><h3>2. Key knowledge to learn</h3><ul><li><strong>Know the language:</strong> learn the precise meaning of the key terms and use them in a complete sentence.</li><li><strong>Understand the relationship:</strong> explain why the process happens, how the quantities connect, or how the evidence supports the claim.</li><li><strong>Recognise representations:</strong> practise reading diagrams, tables, graphs, equations or sources relevant to this topic.</li><li><strong>Apply, do not just memorise:</strong> identify what changes in a new question and which parts of your method still apply.</li></ul><h3>3. Worked example — step by step</h3><div class="example"><strong>Follow this method</strong><br>${escapeHtml(worked)}<br><br><strong>Why the method works:</strong> each step has a purpose, the reasoning is visible, and the final answer is checked rather than simply accepted.</div><h3>4. Try these questions yourself</h3><p>Attempt these without looking at the worked example. Show working for calculations and use full explanations for written questions.</p><ol>${questions.map(q=>`<li style="margin:8px 0">${escapeHtml(q)}</li>`).join('')}</ol><details class="practice-prompt"><summary><strong>Reveal suggested answers / marking guidance</strong></summary><p>${isPhysics?'1. Speed = 360 ÷ 45 = 8 m/s. 2. The object is stationary because its distance is not changing. 3. Acceleration = (18 − 6) ÷ 4 = 3 m/s².':isMath?'1. 5x = 25, so x = 5. 2. 6x − 12 + x = 7x − 12. 3. Area = 9 × 4 = 36 cm²; perimeter = 2(9 + 4) = 26 cm.':'Mark for an accurate definition, a relevant example, logically connected explanation and correct use of subject vocabulary. Your example should directly demonstrate the concept, not merely mention the topic.'}</p></details><h3>5. Exam technique</h3><div class="exam-tip"><strong>Before you answer</strong><br>Identify the command word (such as state, describe, explain, compare or evaluate). Match the depth of your response to the marks available. For calculations, write the equation, substitute values, show working and include units. For longer written answers, make a point, support it with specific evidence and explain why that evidence matters.</div><h3>6. Common mistakes to avoid</h3><div class="mistake"><strong>Watch out</strong><br>Do not give a memorised definition when the question asks you to apply or explain. Avoid skipping steps, using vague terms, forgetting units or leaving a conclusion unsupported. Check exactly what the question asks before finishing.</div><h3>7. Quick recall checklist</h3><ul><li>Can I define the central term accurately without looking?</li><li>Can I complete the worked method from memory?</li><li>Can I explain why each step is appropriate?</li><li>Can I answer a new question and identify my own likely mistake?</li></ul><p><strong>Revision loop:</strong> study for 10–15 minutes, close the guide, answer the questions, check the explanations, then revisit any missed idea tomorrow and again later in the week.</p>`;
+  }
+
+  function renderLessons(){
+    const lessons=[
+      ['Physics','Waves · Reading graphs','Learn amplitude, wavelength, frequency and wave speed with a labelled wave diagram.','18 min'],
+      ['Chemistry','Rates · Collision theory','Explain why temperature, concentration and surface area affect reaction rate.','16 min'],
+      ['Mathematics','Functions · Mapping notation','Read function notation, substitute values and explain each step.','20 min'],
+      ['English Language','Writer’s viewpoint','Analyse language choices using evidence and an explained effect.','14 min'],
+      ['Biology','Enzymes · Factors','Connect active-site shape, collisions, temperature and pH.','17 min'],
+      ['French','Past tense choices','Build accurate past-tense sentences and select the right auxiliary.','15 min']
+    ];
+    document.getElementById('lessonsGrid').innerHTML=lessons.map(([subject,title,desc,time],i)=>`<div class="card lesson"><div class="row"><span class="lesson badge">${subject}</span><span class="kicker">${time}</span></div><h3 style="margin-top:14px">${title}</h3><p class="sub" style="font-size:10px">${desc}</p><button class="primary lesson-demo" data-lesson-demo="${i}">▶ Open demo lesson</button></div>`).join('');
+    document.querySelectorAll('[data-lesson-demo]').forEach(b=>b.addEventListener('click',()=>showLessonDemo(Number(b.dataset.lessonDemo))));
+  }
+  function showLessonDemo(i){
+    const data=[
+      {s:'Physics',t:'Waves · Reading graphs',def:'A wave transfers energy from one place to another without a net transfer of matter. A transverse wave oscillates perpendicular to its direction of travel; a longitudinal wave oscillates parallel to it.',vocab:[['Amplitude','Maximum displacement from the rest position; linked to energy transferred.'],['Wavelength (λ)','Distance between two neighbouring points in phase, such as crest to crest.'],['Frequency (f)','Number of complete waves passing a point each second, measured in hertz (Hz).'],['Period (T)','Time for one complete oscillation; T = 1 ÷ f.']],example:'A wave has frequency 5 Hz and wavelength 2.4 m. First identify the equation v = fλ. Substitute: v = 5 × 2.4. Calculate: v = 12 m/s. Check units: Hz means s⁻¹, so m × s⁻¹ gives m/s.',diagram:'<svg class="demo-diagram" viewBox="0 0 520 180" role="img" aria-label="Transverse wave showing amplitude and wavelength"><line x1="24" y1="90" x2="496" y2="90" stroke="#777" stroke-dasharray="5 4"/><path d="M25 90 Q55 15 85 90 T145 90 T205 90 T265 90 T325 90 T385 90 T445 90 T495 90" fill="none" stroke="#7867df" stroke-width="3"/><line x1="85" y1="25" x2="85" y2="90" stroke="#d07d47" stroke-width="2"/><text x="92" y="48" font-size="12" fill="#a65c2e">Amplitude</text><line x1="85" y1="135" x2="205" y2="135" stroke="#16876b" stroke-width="2"/><path d="M85 135 l8 -4 v8 z M205 135 l-8 -4 v8 z" fill="#16876b"/><text x="122" y="153" font-size="12" fill="#16876b">Wavelength λ</text></svg>',qs:['A wave has frequency 8 Hz and wavelength 0.5 m. Calculate its speed.','State the unit of frequency.','Explain the difference between transverse and longitudinal waves.'],answers:'1. v = fλ = 8 × 0.5 = 4 m/s. 2. Hertz (Hz). 3. Transverse oscillations are perpendicular to travel; longitudinal oscillations are parallel.'},
+      {s:'Chemistry',t:'Rates · Collision theory',def:'A reaction rate describes how quickly reactants are used up or products form. According to collision theory, particles must collide with sufficient energy; some reactions also require a suitable orientation.',vocab:[['Collision frequency','How often particles collide.'],['Activation energy','Minimum energy particles need for a successful reaction.'],['Catalyst','A substance that increases rate by providing an alternative pathway with lower activation energy; it is not used up overall.']],example:'Powdered calcium carbonate reacts faster than the same mass of large chips with acid. The powder exposes more surface area, so more acid particles can collide with the solid each second. More successful collisions per second means a faster reaction.',diagram:'<svg class="demo-diagram" viewBox="0 0 520 150" role="img" aria-label="Particle collision diagram"><rect x="10" y="12" width="240" height="120" rx="12" fill="#f3f0ff" stroke="#d9d1ff"/><rect x="270" y="12" width="240" height="120" rx="12" fill="#eefaf4" stroke="#c8ecda"/><text x="28" y="34" font-size="12" fill="#5443a6">Lower temperature</text><text x="288" y="34" font-size="12" fill="#16704f">Higher temperature</text><g fill="#9b8be9"><circle cx="48" cy="62" r="7"/><circle cx="90" cy="96" r="7"/><circle cx="156" cy="67" r="7"/><circle cx="207" cy="104" r="7"/></g><g fill="#48b58a"><circle cx="300" cy="59" r="7"/><circle cx="335" cy="100" r="7"/><circle cx="377" cy="61" r="7"/><circle cx="415" cy="96" r="7"/><circle cx="470" cy="52" r="7"/><path d="M310 47 L328 57 M365 49 L350 60 M405 82 L391 68 M445 100 L461 86" stroke="#16704f" stroke-width="2"/></g><text x="28" y="122" font-size="10" fill="#5443a6">Fewer energetic collisions</text><text x="288" y="122" font-size="10" fill="#16704f">More successful collisions</text></svg>',qs:['Explain why increasing temperature usually increases rate.','Why can a catalyst increase rate without being used up?','Suggest why powder reacts faster than large lumps.'],answers:'1. Particles move faster, collide more often, and a greater fraction have energy at least equal to activation energy. 2. It provides an alternative pathway with lower activation energy and is regenerated. 3. Powder has greater exposed surface area.'},
+      {s:'Mathematics',t:'Functions · Mapping notation',def:'A function takes an input and applies a rule to produce exactly one output. In f(x), x is the input and the expression defines the rule.',vocab:[['Input','The value substituted for x.'],['Output','The result after applying the rule.'],['Function notation','For example, f(x) = 3x − 2 means multiply the input by 3 then subtract 2.']],example:'Let f(x) = 3x − 2. Find f(5). Step 1: replace every x with 5, giving 3(5) − 2. Step 2: multiply first: 15 − 2. Step 3: subtract: f(5) = 13. Keep the brackets to make the substitution clear.',diagram:'<svg class="demo-diagram" viewBox="0 0 520 120" role="img" aria-label="Function machine diagram"><rect x="20" y="35" width="100" height="48" rx="10" fill="#f0edff" stroke="#9b8be9"/><text x="70" y="64" text-anchor="middle" font-size="15" fill="#5546a7">Input 5</text><path d="M125 59 H180" stroke="#777" stroke-width="2"/><path d="M173 53 l8 6 -8 6" fill="none" stroke="#777" stroke-width="2"/><rect x="185" y="25" width="150" height="68" rx="12" fill="#eafaf1" stroke="#73c7a0"/><text x="260" y="53" text-anchor="middle" font-size="13" fill="#166c4b">Function rule</text><text x="260" y="73" text-anchor="middle" font-size="15" fill="#166c4b">× 3, then − 2</text><path d="M340 59 H395" stroke="#777" stroke-width="2"/><path d="M388 53 l8 6 -8 6" fill="none" stroke="#777" stroke-width="2"/><rect x="400" y="35" width="100" height="48" rx="10" fill="#fff0e8" stroke="#e5a17b"/><text x="450" y="64" text-anchor="middle" font-size="15" fill="#9a4c25">Output 13</text></svg>',qs:['If g(x) = 2x + 7, calculate g(4).','If h(x) = x² − 1, calculate h(3).','For f(x) = 5x, what input gives output 35?'],answers:'1. g(4) = 2(4) + 7 = 15. 2. h(3) = 3² − 1 = 8. 3. 5x = 35, so x = 7.'},
+      {s:'English Language',t:'Writer’s viewpoint',def:'A writer’s viewpoint is their attitude or position towards a subject. Analysis explains how particular language or structural choices guide the reader, rather than merely naming a technique.',vocab:[['Connotation','Ideas or feelings suggested by a word beyond its literal meaning.'],['Tone','The attitude conveyed, such as urgent, amused or critical.'],['Evidence','A short, relevant quotation or specific detail from the text.'],['Inference','A conclusion supported by evidence and reasoning.']],example:'Example sentence: “The narrow alley swallowed the last strip of sunlight.” The verb “swallowed” personifies the alley as something consuming light. This creates a threatening, enclosing mood and may make the reader anticipate danger. The analysis links choice → meaning → reader effect.',diagram:'<div class="demo-diagram"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center"><div class="demo-section"><b>Writer’s choice</b><p>“swallowed”</p></div><div class="demo-section"><b>Meaning</b><p>Consumes light</p></div><div class="demo-section"><b>Effect</b><p>Threatening mood</p></div></div><p style="text-align:center">Choice → connotation → reader response</p></div>',qs:['Identify one verb in a sentence and explain its connotations.','What is the difference between identifying a technique and analysing it?','Write one analysis sentence linking a quotation to reader effect.'],answers:'Look for a precise choice, an explanation of its connotations in context, and a plausible reader effect supported by the text.'},
+      {s:'Biology',t:'Enzymes · Factors',def:'Enzymes are biological catalysts, usually proteins, that speed up reactions by lowering activation energy. Their active site has a shape and chemical properties complementary to a substrate.',vocab:[['Substrate','The reactant an enzyme acts on.'],['Active site','Region where substrate binds and reaction occurs.'],['Optimum','Condition at which enzyme activity is highest.'],['Denaturation','Change in protein structure that alters the active site so the substrate no longer fits effectively.']],example:'As temperature rises from a low value, particles gain kinetic energy and collisions increase, so the rate rises. Beyond the enzyme’s optimum, bonds maintaining its shape can be disrupted; the active site changes and fewer substrate molecules bind, so the rate falls.',diagram:'<svg class="demo-diagram" viewBox="0 0 520 145" role="img" aria-label="Enzyme and substrate model"><path d="M45 105 Q45 35 100 35 Q145 35 155 75 L155 90 L128 90 L128 75 Q100 58 83 83 L83 105 Z" fill="#d8d0ff" stroke="#7665df" stroke-width="2"/><path d="M128 68 L145 68 L145 90 L128 90" fill="#fff" stroke="#7665df" stroke-width="2"/><path d="M245 30 L275 30 L275 62 L260 72 L245 62 Z" fill="#ffd8c4" stroke="#d07d47" stroke-width="2"/><path d="M175 72 H220" stroke="#777" stroke-width="2"/><path d="M213 66 l8 6 -8 6" fill="none" stroke="#777" stroke-width="2"/><text x="35" y="125" font-size="12" fill="#5443a6">Enzyme active site</text><text x="230" y="91" font-size="12" fill="#a65c2e">Substrate</text><text x="330" y="61" font-size="13" fill="#555">Complementary fit</text><text x="330" y="80" font-size="11" fill="#777">→ reaction proceeds</text></svg>',qs:['Define substrate and active site.','Explain why a very high temperature can reduce enzyme activity.','Describe what happens to rate as temperature approaches the optimum.'],answers:'1. Substrate is the reactant; active site is the region it binds to. 2. The enzyme may denature and the active site changes shape. 3. Rate generally increases because particles move faster and successful collisions become more frequent, up to the optimum.'},
+      {s:'French',t:'Past tense choices',def:'In French, the passé composé commonly describes completed past events. It uses a present-tense form of avoir or être plus a past participle.',vocab:[['Auxiliary','The helper verb avoir or être.'],['Past participle','The form expressing the completed action, e.g. parlé, fini, vendu.'],['Agreement','With être, the past participle usually agrees with the subject in gender and number.']],example:'“Hier, j’ai regardé un film.” Hier means yesterday; regarder becomes the past participle regardé; j’ai is the correct form of avoir for je. For a common être verb: “Elle est allée” uses est and agrees with elle by adding -e to allée.',diagram:'<div class="demo-diagram"><div style="display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap"><span class="chip accent">Subject</span><b>+</b><span class="chip">avoir / être</span><b>+</b><span class="chip" style="background:#eafaf1">past participle</span></div><p style="text-align:center;margin-top:10px">J’ + ai + regardé → J’ai regardé.</p></div>',qs:['Translate “I finished my homework yesterday.”','Complete: Elle ___ (aller) au parc.','Name the two parts of the passé composé.'],answers:'1. J’ai fini mes devoirs hier. 2. Elle est allée au parc. 3. An auxiliary verb in the present + past participle.'}
+    ];
+    const d=data[i];openModal(`${d.s} · Demo lesson`, `<div class="guide-content"><div class="eyebrow">INTERACTIVE SAMPLE LESSON · ${d.s.toUpperCase()}</div><h2>${d.t}</h2><div class="demo-section"><h3>1. What is it?</h3><p>${d.def}</p></div><h3>2. Key vocabulary</h3><dl>${d.vocab.map(([a,b])=>`<dt style="font-weight:800;margin-top:9px">${a}</dt><dd style="margin:3px 0 0 14px">${b}</dd>`).join('')}</dl><h3>3. Visual explanation</h3>${d.diagram}<h3>4. Worked example</h3><div class="example">${d.example}</div><h3>5. Try it yourself</h3><ol>${d.qs.map(q=>`<li style="margin:8px 0">${q}</li>`).join('')}</ol><details class="practice-prompt"><summary><strong>Show suggested answers</strong></summary><p>${d.answers}</p></details><h3>6. Exam tips</h3><div class="exam-tip">Use the exact subject vocabulary, show the reasoning rather than jumping to the result, label any diagram, and check the question’s command word before finishing.</div><h3>7. Check your learning</h3><p>Close the answers, explain the main idea aloud, then answer the three questions again from memory.</p></div>`);
+  }
+
+  function detailedNoteContent(subject){
+    const packs={
+      'Physics':{topic:'Motion and graphs',definition:'Motion is a change in position over time. Distance is the total path travelled; displacement is the straight-line change in position with direction. Speed describes how quickly distance changes. Velocity includes direction. Acceleration is the rate of change of velocity.',terms:[['Distance','Total length of the route travelled (m).'],['Displacement','Change in position in a stated direction (m).'],['Average speed','Total distance divided by total time (m/s).'],['Acceleration','Change in velocity divided by time (m/s²).'],['Gradient','Vertical change divided by horizontal change on a graph.']],worked:'A cyclist travels 240 m in 30 s. Known: d = 240 m, t = 30 s. Required: average speed. Equation: v = d/t. Substitute: v = 240/30 = 8. Answer: 8 m/s. Check: 8 m/s × 30 s = 240 m, so the result matches the journey.',questions:['A bus travels 360 m in 45 s. Calculate average speed.','A runner moves at 4 m/s for 25 s. Calculate distance.','Explain what a horizontal distance–time graph means.','Explain the difference between distance and displacement.','A velocity rises from 6 m/s to 18 m/s in 4 s. Calculate acceleration.'],answers:'1. 8 m/s. 2. 100 m. 3. The object is stationary. 4. Distance is total path; displacement is straight-line change with direction. 5. (18−6)/4 = 3 m/s².',formula:'speed = distance ÷ time; distance = speed × time; time = distance ÷ speed; acceleration = change in velocity ÷ time'},
+      'Mathematics':{topic:'Algebra and equations',definition:'An equation states that two expressions have equal value. To solve it, perform inverse operations while doing the same operation to both sides so equality is preserved.',terms:[['Variable','A symbol representing an unknown or changing number.'],['Coefficient','The number multiplying a variable, e.g. 4 in 4x.'],['Inverse operation','An operation that reverses another, such as addition/subtraction.'],['Substitution','Replacing a variable with a known value.'],['Expand','Multiply a term through brackets.']],worked:'Solve 4x − 7 = 21. Add 7 to both sides: 4x = 28. Divide both sides by 4: x = 7. Check in the original: 4(7) − 7 = 28 − 7 = 21. Both sides match, so x = 7 is correct.',questions:['Solve 5x + 4 = 29.','Expand and simplify 3(2x − 4) + x.','Solve 2(x + 3) = 18.','If f(x)=3x−2, calculate f(5).','Explain why the same operation must be applied to both sides.'],answers:'1. x=5. 2. 7x−12. 3. x=6. 4. 13. 5. It preserves equality between the two sides.',formula:'equation balance: left side = right side; inverse operations undo the operation around the unknown'},
+      'Biology':{topic:'Cells and transport',definition:'Cells are the basic structural and functional units of living organisms. Their specialised structures perform functions needed for survival. Materials move into and out of cells through the cell membrane.',terms:[['Nucleus','Contains genetic material and helps control cell activities.'],['Cell membrane','Controls movement of substances into and out of the cell.'],['Mitochondrion','Site of most aerobic respiration in eukaryotic cells.'],['Diffusion','Net movement of particles from higher to lower concentration.'],['Osmosis','Net movement of water through a partially permeable membrane from a dilute solution to a more concentrated solution.']],worked:'A dye drop spreads through still water. At first, dye concentration is high near the drop and low farther away. Random particle movement produces a net movement from the high-concentration region to low-concentration regions until the dye becomes more evenly distributed. This is diffusion; particles do not stop moving at equilibrium.',questions:['Define diffusion precisely.','State two functions of the cell membrane.','Explain why a cell needs mitochondria.','Compare diffusion and osmosis.','Predict what happens to net diffusion rate when the concentration gradient increases.'],answers:'1. Net movement of particles from higher to lower concentration. 2. It controls exchange and helps maintain the internal environment. 3. They are sites of most aerobic respiration, releasing energy for cell processes. 4. Diffusion applies to particles generally; osmosis specifically concerns water through a partially permeable membrane. 5. The net rate usually increases.',formula:'For many transport questions, explain: concentration difference → net movement → resulting change'},
+      'Chemistry':{topic:'Atoms, bonding and reactions',definition:'An atom has a nucleus containing protons and usually neutrons, with electrons in shells or energy levels around it. Chemical reactions rearrange atoms; atoms are conserved, so equations must be balanced.',terms:[['Element','Substance containing only one type of atom.'],['Compound','Two or more elements chemically bonded in fixed proportions.'],['Reactant','Starting substance in a chemical reaction.'],['Product','Substance formed by a reaction.'],['Conservation of mass','Total mass remains constant in a closed system because atoms are rearranged, not created or destroyed.']],worked:'Balance Mg + O₂ → MgO. Count atoms: left has 1 Mg and 2 O; right has 1 Mg and 1 O. Put 2 before MgO to give two O atoms: Mg + O₂ → 2MgO. Now there are 2 Mg on the right, so put 2 before Mg: 2Mg + O₂ → 2MgO. Check: Mg = 2 on each side; O = 2 on each side.',questions:['Define an element and a compound.','Balance H₂ + O₂ → H₂O.','Explain why formula subscripts should not be changed when balancing.','How many protons are in a neutral atom with atomic number 11?','Explain conservation of mass in a reaction.'],answers:'1. Element: one atom type; compound: chemically bonded elements. 2. 2H₂ + O₂ → 2H₂O. 3. Changing subscripts changes the identity of the substance. 4. 11. 5. Atoms are rearranged and the same atoms remain present.',formula:'Balance by changing coefficients in front of formulae, never the subscripts inside formulae'},
+    };
+    const d=packs[subject]||{topic:'Core concepts and exam application',definition:`A strong ${subject} answer combines accurate subject knowledge with clear explanation and specific application. Learn what each key term means, how concepts connect, and when a method or interpretation is appropriate.`,terms:[['Key term','A precise subject-specific word that communicates an idea.'],['Evidence','A relevant fact, example, quotation, data point or observation.'],['Application','Using knowledge in the exact context given by a question.'],['Explanation','Showing how or why the evidence supports a conclusion.'],['Evaluation','Weighing strengths, limitations or alternative interpretations before judging.']],worked:`For a typical ${subject} question, first identify the command word. Define the central concept accurately. Select one relevant example or piece of evidence. Explain step by step how it supports your point, then link back to the question. Finally check that the response answers the exact task and uses correct vocabulary.`,questions:[`Define one important concept from ${subject}.`,`Apply that concept to a new example.`,`Explain why your example demonstrates the concept.`,`Identify one common misconception and correct it.`,`Write a short exam answer using evidence and a clear conclusion.`],answers:'Suggested marking guidance: award credit for a precise definition, relevant example/evidence, logically connected explanation, accurate terminology and a direct conclusion.',formula:'Written answer structure: point → evidence/example → explanation → link to the question'};
+    return `<div class="note-line" contenteditable="true"><h3>1. Definition — what is it?</h3><p>${d.definition}</p><p><strong>Big idea:</strong> Learn the meaning first, then practise explaining it without copying the wording.</p></div><div class="note-line" contenteditable="true"><h3>2. Key vocabulary</h3><dl>${d.terms.map(([a,b])=>`<dt style="font-weight:800;margin-top:8px">${a}</dt><dd style="margin:2px 0 0 12px">${b}</dd>`).join('')}</dl></div><div class="note-line" contenteditable="true"><h3>3. Formula / answer structure</h3><p>${d.formula}</p><p>Always state what each symbol or step means. Include units where relevant, and make the reasoning visible to the examiner.</p></div><div class="note-line" contenteditable="true"><h3>4. Diagram / visual model</h3><div class="demo-diagram"><div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap"><span class="chip accent">Key idea</span><b>→</b><span class="chip">Method / process</span><b>→</b><span class="chip" style="background:#eafaf1">Result / explanation</span></div><p style="text-align:center;margin:10px 0 0">Use arrows to show order or cause and effect. Label each part and explain the connection in words.</p></div></div><div class="note-line" contenteditable="true"><h3>5. Fully worked example</h3><p>${d.worked}</p><p><strong>Why this works:</strong> the method is chosen deliberately, each step is shown, and the final result is checked or linked back to the question.</p></div><div class="note-line" contenteditable="true"><h3>6. Practice questions — try before revealing answers</h3><ol>${d.questions.map(q=>`<li style="margin:7px 0">${q}</li>`).join('')}</ol><details><summary><strong>Reveal suggested answers / marking guidance</strong></summary><p>${d.answers}</p></details></div><div class="note-line" contenteditable="true"><h3>7. Exam tips and common mistakes</h3><ul><li>Circle the command word: state, describe, explain, compare or evaluate.</li><li>Define technical terms precisely and use them in context.</li><li>Show every calculation step and include units where required.</li><li>Label diagrams and explain what the labels demonstrate.</li><li>Do not simply repeat the question; use evidence and reasoning.</li><li>Check the answer against the question and correct any missing steps.</li></ul></div><div class="note-line" contenteditable="true"><h3>8. Retrieval checklist</h3><p>□ I can define the key idea from memory. □ I can explain each key term. □ I can reproduce the worked method. □ I can answer the practice questions without notes. □ I can explain a common mistake.</p><p><em>Sample revision content: match this material to your actual syllabus, class notes and textbook before using it for an exam.</em></p></div>`;
+  }
+
+  function openOnboarding(){
+    const subjectList=['Mathematics','English Language','English Literature','Biology','Chemistry','Physics','Computer Science','History','Geography','Business','Economics','French','Spanish'];
+    const chosen=new Set(state.profile.subjects||[]);
+    openModal('Welcome to StudyVerse', `<div class="guide-content"><div class="eyebrow">LET’S PERSONALISE YOUR STUDY SPACE</div><h2>First, tell us what you study.</h2><p class="sub">This quick setup tailors the demo dashboard. You can change these choices later in Settings.</p><div class="onboard-step"><strong>Step 1 · Your school year</strong><select id="welcomeYear" class="select" style="width:100%;margin-top:8px"><option>Year 7</option><option>Year 8</option><option>Year 9</option><option>Year 10</option><option>Year 11</option><option>Year 12</option><option>Year 13</option><option>Other</option></select></div><div class="onboard-step"><strong>Step 2 · Curriculum / syllabus</strong><select id="welcomeCurriculum" class="select" style="width:100%;margin-top:8px"><option>Cambridge IGCSE</option><option>Cambridge International (IGCSE / A Level)</option><option>Malaysia KSSM / SPM</option><option>IB (MYP / Diploma)</option><option>England National Curriculum / GCSE</option><option>AP / US curriculum</option><option>Other / not sure yet</option></select></div><div class="onboard-step"><strong>Step 3 · Select your subjects</strong><div class="onboard-subjects" style="margin-top:9px">${subjectList.map(n=>`<label><input type="checkbox" class="welcome-subject" value="${n}" ${chosen.has(n)?'checked':''}>${n}</label>`).join('')}</div></div><button class="primary" id="finishWelcome" style="width:100%;margin-top:12px">Build my StudyVerse →</button><p class="small muted" style="margin-top:9px">Demo notice: this profile is stored in this browser only. It does not send your information to a server.</p></div>`);
+    document.getElementById('welcomeYear').value=state.profile.year||'Year 10';
+    document.getElementById('welcomeCurriculum').value=state.profile.qualification||'Cambridge IGCSE';
+    document.getElementById('finishWelcome').onclick=()=>{const picked=[...document.querySelectorAll('.welcome-subject:checked')].map(x=>x.value);state.profile.year=document.getElementById('welcomeYear').value;state.profile.qualification=document.getElementById('welcomeCurriculum').value;state.profile.subjects=picked.length?picked:['Mathematics','English Language','Biology','Physics'];localStorage.setItem('sv-onboarding-complete','yes');save();closeModal();renderHome();renderSubjects();renderSettings();document.getElementById('avatar').textContent=(state.profile.year.match(/Year (\d+)/)?.[1]||'SV').slice(0,2)+'S';toast('Your StudyVerse workspace is ready.');};
+  }
+
+  function renderExamPlan(){ const input=document.getElementById('examDate'); if(input && !input.value){const d=new Date();d.setDate(d.getDate()+56);input.value=d.toISOString().slice(0,10);} }
+
+  function renderPlanner(){
+    document.getElementById('mondayPlan').innerHTML=[['16:00','Physics','Waves · 30 min'],['17:00','Mathematics','Functions · 45 min'],['19:30','Biology','Flashcards · 20 min']].map(([time,s,detail])=>`<div class="plan-item"><div><div class="plan-time">${time}</div><div class="plan-sub">${s} · ${detail}</div></div><span class="chip">Planned</span></div>`).join('');
+  }
+
+  function renderProgress(){
+    const latest=state.progress.at(-1)?.value||73;
+    document.getElementById('progressStats').innerHTML=[['Overall mastery',`${latest}%`,'Latest completed test'],['Tests completed',`${Math.max(4,state.progress.length)}`,'Every test adds a point'],['Questions completed','126','Across tracked subjects'],['Topics tracked','34','Knowledge Map nodes']].map(([a,b,c])=>`<div class="stat"><div class="label">${a}</div><div class="value">${b}</div><div class="foot">${c}</div></div>`).join('');
+    const svg=document.getElementById('progressChart'); const w=900,h=230,p=24; const vals=state.progress.map(x=>x.value); const min=0,max=100; const pts=vals.map((v,i)=>{const x=p+(w-2*p)*(i/Math.max(1,vals.length-1));const y=h-p-(h-2*p)*(v-min)/(max-min);return [x,y];}); const path=pts.map((pt,i)=>(i?'L':'M')+pt[0].toFixed(1)+','+pt[1].toFixed(1)).join(' '); svg.innerHTML=`<line x1="24" y1="24" x2="24" y2="206" stroke="#e4e5eb"/><line x1="24" y1="206" x2="876" y2="206" stroke="#e4e5eb"/><line x1="24" y1="115" x2="876" y2="115" stroke="#eeeeF3" stroke-dasharray="4 4"/><path d="${path}" fill="none" stroke="#6b5cff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>${pts.map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="5" fill="#fff" stroke="#6b5cff" stroke-width="3"><title>${escapeHtml(state.progress[i].label)} · ${state.progress[i].value}%</title></circle>`).join('')}<text x="30" y="36" font-size="10" fill="#888b97">100%</text><text x="30" y="121" font-size="10" fill="#888b97">50%</text><text x="30" y="202" font-size="10" fill="#888b97">0%</text>`; document.getElementById('chartLabels').innerHTML=state.progress.slice(-6).map(x=>`<span>${escapeHtml(x.label)}</span>`).join('');
+    const mastery=[['Motion',84,'Concepts'],['Forces',71,'Calculations'],['Waves',39,'Graphs'],['Energy',82,'Application'],['Bonding',68,'Concepts'],['Algebra',86,'Calculations']]; document.getElementById('masteryCards').innerHTML=mastery.map(([n,v,s])=>`<div class="card"><div class="row"><strong style="font-size:11px">${n}</strong><span class="chip ${v<50?'warn':'good'}">${v}%</span></div><div class="sub" style="font-size:9px;margin:7px 0">Strongest signal: ${s}</div><div class="progressbar"><span style="width:${v}%"></span></div></div>`).join('');
+  }
+
+  function renderMap(){
+    const nodes=[['Motion',84,'good','Physics'],['Forces',71,'mid','Physics'],['Waves',39,'low','Physics'],['Energy',82,'good','Physics'],['Bonding',68,'mid','Chemistry'],['Algebra',86,'good','Mathematics'],['Enzymes',78,'good','Biology'],['Writer viewpoint',74,'mid','English'],['French grammar',76,'mid','French']];
+    document.getElementById('knowledgeMap').innerHTML=nodes.map(([n,v,c,s])=>`<div class="map-node"><div class="ring ${c}">${v}%</div><strong>${n}</strong><small>${s}</small><div class="progressbar" style="margin-top:10px"><span style="width:${v}%"></span></div></div>`).join('');
+  }
+
+  function renderRewards(){
+    document.getElementById('rewardStats').innerHTML=[['XP','2,840','Level 8'],['Streak','8 days','Personal best'],['Weekly goal','4 / 5','Sessions'],['Milestones','12 / 20','Unlocked']].map(([a,b,c])=>`<div class="stat"><div class="label">${a}</div><div class="value">${b}</div><div class="foot">${c}</div></div>`).join('');
+    const rewards=[['✦','First baseline','Complete your first baseline test.',true],['7','7-day consistency','Study on seven different days.',true],['100','100 questions','Complete 100 tracked questions.',true],['▤','Coursebook complete','Finish a full imported coursebook path.',false],['◎','Topic mastered','Reach and maintain mastery on a topic.',false],['◈','Exam ready','Complete an exam preparation cycle.',false]];
+    document.getElementById('rewardsGrid').innerHTML=rewards.map(([i,n,d,u])=>`<div class="card reward ${u?'':'locked'}"><div class="row"><div class="badge-icon">${i}</div><span class="chip ${u?'good':'warn'}">${u?'Unlocked':'Locked'}</span></div><h3 style="margin-top:13px">${n}</h3><div class="sub" style="font-size:9px">${d}</div></div>`).join('');
+  }
+
+  function renderCommunity(filter='all'){
+    const items=filter==='all'?state.community:state.community.filter(p=>p.tag===filter);
+    document.getElementById('communityFeed').innerHTML=items.map((p,i)=>`<div class="post"><div class="post-head"><div class="post-avatar">${escapeHtml(p.initials)}</div><div><strong style="font-size:11px">${escapeHtml(p.name)}</strong><div class="post-meta">${escapeHtml(p.time)} · ${escapeHtml(p.tag)}</div></div></div><div class="post-body">${escapeHtml(p.text)}</div><div class="post-actions"><button data-like="${i}">♡ ${p.likes}</button><button data-reply="${i}">◌ ${p.replies} replies</button><button data-report="${i}">Report</button></div></div>`).join('');document.querySelectorAll('[data-like]').forEach(b=>b.onclick=()=>{const p=items[Number(b.dataset.like)];p.likes++;renderCommunity(filter);});document.querySelectorAll('[data-reply]').forEach(b=>b.onclick=()=>openModal('Demo replies',`<div class="card tight"><strong>Sample student reply</strong><p class="sub" style="margin:6px 0 0">Try turning the topic into a question, then answer it from memory and check your coursebook.</p></div><div class="field" style="margin-top:12px"><label>Add a demo reply</label><textarea class="textarea" id="demoReply" placeholder="Write a helpful response…"></textarea></div><button class="primary" style="margin-top:10px" id="sendDemoReply">Post reply</button>`));document.getElementById('sendDemoReply')?.addEventListener('click',()=>{const t=document.getElementById('demoReply').value.trim();if(!t)return toast('Write a reply first.');if(containsBadLanguage(t))return toast('Please remove profanity.');closeModal();toast('Demo reply added.');});document.querySelectorAll('[data-report]').forEach(b=>b.onclick=()=>{openModal('Report post',`<p class="sub">Report this sample post for review in the demo?</p><button class="primary" id="confirmReport">Submit report</button>`);document.getElementById('confirmReport').onclick=()=>{closeModal();toast('Demo report recorded locally.');};});
+  }
+
+  function newPost(){
+    openModal('Create a post', `<div class="field"><label>Subject / community</label><select class="select" id="postTag"><option>#StudyTips</option><option>#Mathematics</option><option>#Biology</option><option>#Physics</option><option>#Year10</option><option>#Year11</option><option>#SchoolLife</option></select></div><div class="field" style="margin-top:12px"><label>Your post</label><textarea class="textarea" id="postText" placeholder="Ask a question, share a study method, or start a school-life discussion."></textarea></div><div class="card tight" style="margin-top:12px;background:#fafafa"><span class="small">Keep posts school-appropriate. StudyVerse will reject common profanity rather than silently changing your words.</span></div><div style="display:flex;justify-content:flex-end;margin-top:13px"><button class="primary" id="publishPost">Publish post</button></div>`);
+    document.getElementById('publishPost').onclick=()=>{const text=document.getElementById('postText').value.trim();const tag=document.getElementById('postTag').value;if(!text)return toast('Write something first.');if(containsBadLanguage(text)){toast('Please edit your post and remove the profanity.');return;}state.community.unshift({name:'You',initials:'YO',time:'now',tag,text,likes:0,replies:0});closeModal();renderCommunity();toast('Post published.');};
+  }
+
+  function containsBadLanguage(text){ return /\b(fuck|fucking|shit|bitch|cunt|asshole|bastard|dick|nigger|nigga)\b/i.test(text); }
+
+  function renderFuture(){
+    document.getElementById('interestSuggest').innerHTML=['Space','Helping people','Computers','Technology','Animals','Writing','Art','Business','Medicine'].map(x=>`<button data-interest="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join('');
+    document.getElementById('futureCategories').innerHTML=careerCategories.map(c=>`<div class="card tight"><strong style="font-size:11px">${escapeHtml(c)}</strong><div class="sub" style="font-size:9px;margin-top:5px">Explore related interests and pathways.</div></div>`).join('');
+    document.querySelectorAll('[data-interest]').forEach(btn=>btn.onclick=()=>{document.getElementById('interestInput').value=btn.dataset.interest;searchInterest();});
+  }
+
+  function searchInterest(){
+    const raw=document.getElementById('interestInput').value.trim(); const key=raw.toLowerCase(); const found=careerMap[key] || Object.entries(careerMap).find(([k])=>key.includes(k)||k.includes(key))?.[1] || [];
+    const list=found.length?found:['Science & discovery','Technology','Creative','Business'];
+    document.getElementById('futureResults').innerHTML=list.map((r,i)=>`<div class="card"><span class="chip ${i<2?'accent':''}">${i<2?'Suggested pathway':'Related area'}</span><h3 style="margin-top:12px">${escapeHtml(r)}</h3><div class="sub" style="font-size:9px">Explore subjects → skills → qualifications → career areas → specific careers.</div><button class="secondary" style="margin-top:12px" data-pathway="${escapeHtml(r)}">Explore pathway</button></div>`).join('');document.querySelectorAll('[data-pathway]').forEach(b=>b.onclick=()=>openModal(`${b.dataset.pathway} pathway`,`<div class="stack"><div class="card tight"><strong>Useful skills to build</strong><p class="sub" style="margin:6px 0 0">Communication, problem-solving, digital confidence, teamwork, research and reflection. The best mix depends on the role.</p></div><div class="card tight"><strong>Subjects to investigate</strong><p class="sub" style="margin:6px 0 0">Compare your selected subjects with course prerequisites. Keep options open while you explore.</p></div><div class="card tight"><strong>Try next</strong><p class="sub" style="margin:6px 0 0">Choose one small project, club, reading topic or short course to test your interest.</p></div><div class="card tight"><strong>Possible routes</strong><p class="sub" style="margin:6px 0 0">Research university degrees, apprenticeships, vocational qualifications and other routes available in your country.</p></div><p class="small muted">Career suggestions are exploratory and do not predict which career is right for you.</p></div>`));
+    if(raw) toast(`Exploring ${raw}.`);
+  }
+
+  function renderTeacherMaterials(){
+    const wrap=document.getElementById('teacherMaterials'); if(!wrap)return;
+    wrap.innerHTML=state.materials.length?state.materials.map(m=>`<button class="template ${m.id===state.selectedMaterialId?'active':''}" data-select-material="${m.id}">${escapeHtml(m.title)}<div style="font-size:8px;color:var(--muted);margin-top:3px">${escapeHtml(m.subject)}</div></button>`).join(''):`<div class="empty"><strong>No uploaded material</strong><span>Choose a demo material or ask a sample question.</span></div>`;
+    document.querySelectorAll('[data-select-material]').forEach(b=>b.onclick=()=>{state.selectedMaterialId=b.dataset.selectMaterial;save();renderTeacherMaterials();toast('Active material changed.');});
+    renderChat();
+  }
+
+  function renderChat(){
+    const chat=document.getElementById('chat');
+    if(!state.chat.length){chat.innerHTML='<div class="empty"><strong>Ask your first question.</strong><span>Select an uploaded material on the left for source-aware answers.</span></div>';return;}
+    chat.innerHTML=state.chat.map(m=>`<div class="bubble ${m.role==='user'?'user':'ai'}">${escapeHtml(m.content)}</div>`).join(''); chat.scrollTop=chat.scrollHeight;
+  }
+
+  async function sendChat(){
+    const input=document.getElementById('chatInput'); const text=input.value.trim(); if(!text)return; input.value=''; state.chat.push({role:'user',content:text});renderChat();save();
+    try{const data=await api('/api/teacher',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({materialId:state.selectedMaterialId,messages:state.chat.slice(-12)})});state.chat.push({role:'assistant',content:data.content||'I could not generate a response.'});renderChat();save();}
+    catch(err){state.chat.push({role:'assistant',content:`Demo teacher unavailable: ${err.message}`});renderChat();save();}
+  }
+
+  function buildPractice(){
+    const area=document.getElementById('practiceArea');
+    const subject=document.getElementById('practiceSubject').value||'Physics';
+    const topic=document.getElementById('practiceTopic').value||'Mixed topics';
+    const difficulty=document.getElementById('practiceDifficulty').value||'Standard';
+    const count=Math.max(5,Math.min(15,Number(document.getElementById('practiceCount').value)||5));
+    const bank={
+      Physics:[
+        {q:'A runner travels 150 m in 30 s. Calculate the average speed.',o:['5 m/s','0.2 m/s','180 m/s','4 m/s'],a:0,e:'Speed = distance ÷ time = 150 ÷ 30 = 5 m/s. Include the unit.'},
+        {q:'What does the gradient of a distance–time graph represent?',o:['Acceleration','Speed','Distance','Force'],a:1,e:'Gradient = change in distance ÷ change in time, so it represents speed.'},
+        {q:'A car speeds up from 4 m/s to 16 m/s in 6 s. Find its acceleration.',o:['2 m/s²','12 m/s²','3 m/s²','72 m/s²'],a:0,e:'Acceleration = change in velocity ÷ time = (16 − 4) ÷ 6 = 2 m/s².'},
+        {q:'What does a horizontal line on a distance–time graph show?',o:['The object is stationary','The object accelerates','The object moves at constant speed','The object reverses'],a:0,e:'Distance is not changing with time, so the object is stationary.'},
+        {q:'Which quantity is represented by the area under a velocity–time graph?',o:['Acceleration','Displacement','Force','Power'],a:1,e:'Area under a velocity–time graph gives displacement; with speed, it gives distance travelled.'},
+        {q:'Which is the correct unit for acceleration?',o:['m/s','m/s²','kg m/s','N/kg²'],a:1,e:'Acceleration is change in velocity per second, giving metres per second squared.'}
+      ],
+      Mathematics:[
+        {q:'Solve 3x + 5 = 20.',o:['x = 5','x = 15','x = 25/3','x = 3'],a:0,e:'Subtract 5: 3x = 15. Divide by 3: x = 5. Check: 3(5)+5=20.'},
+        {q:'Expand 4(x + 3).',o:['4x + 3','4x + 12','x + 12','7x'],a:1,e:'Multiply each term inside the bracket by 4: 4×x + 4×3 = 4x + 12.'},
+        {q:'A triangle has base 8 cm and perpendicular height 5 cm. Find its area.',o:['40 cm²','20 cm²','13 cm²','26 cm²'],a:1,e:'Area = ½ × base × height = ½ × 8 × 5 = 20 cm².'},
+        {q:'What is 15% of 80?',o:['8','12','15','20'],a:1,e:'10% of 80 is 8 and 5% is 4; together 15% is 12.'},
+        {q:'Simplify 6a + 3a − 2a.',o:['7a','11a','a','7a²'],a:0,e:'Combine like terms: (6 + 3 − 2)a = 7a.'},
+        {q:'A fair six-sided die is rolled. What is the probability of getting an even number?',o:['1/6','1/3','1/2','2/3'],a:2,e:'The even outcomes are 2, 4 and 6: three outcomes out of six, so 3/6 = 1/2.'}
+      ],
+      Biology:[
+        {q:'What is diffusion?',o:['Net movement from high to low concentration','Water moving through a partially permeable membrane only','Movement using energy from low to high concentration','Cell division'],a:0,e:'Diffusion is the net movement of particles down a concentration gradient.'},
+        {q:'Which organelle is the main site of aerobic respiration?',o:['Ribosome','Mitochondrion','Cell wall','Chloroplast'],a:1,e:'Mitochondria are the main site of aerobic respiration and ATP release.'},
+        {q:'What is the function of red blood cells?',o:['Produce hormones','Carry oxygen','Digest starch','Make antibodies only'],a:1,e:'Haemoglobin in red blood cells binds oxygen for transport around the body.'},
+        {q:'Which process uses light energy to make glucose in plants?',o:['Respiration','Diffusion','Photosynthesis','Transpiration'],a:2,e:'Photosynthesis uses light energy, carbon dioxide and water to make glucose and oxygen.'},
+        {q:'Why do enzymes have an optimum temperature?',o:['Their active site works best in a certain range','They are used up instantly','They only work below 0°C','Temperature never affects them'],a:0,e:'At low temperatures reactions are slower; high temperatures can denature enzymes and alter the active site.'},
+        {q:'What happens to water during osmosis?',o:['It moves from lower water potential to higher water potential','It moves through a partially permeable membrane from higher to lower water potential','It always moves using ATP','It becomes a solute'],a:1,e:'Osmosis is the net movement of water through a partially permeable membrane from higher to lower water potential.'}
+      ],
+      Chemistry:[
+        {q:'What is an element?',o:['A substance containing one type of atom','Two elements chemically bonded','A mixture that can be filtered','A charged particle only'],a:0,e:'An element contains only one type of atom.'},
+        {q:'Which change balances H₂ + O₂ → H₂O?',o:['H₂ + O₂ → H₂O₂','2H₂ + O₂ → 2H₂O','H₂ + 2O₂ → H₂O','2H₂ + 2O₂ → H₂O'],a:1,e:'There are four hydrogen atoms and two oxygen atoms on both sides in 2H₂ + O₂ → 2H₂O.'},
+        {q:'What is the pH of a neutral solution at room temperature?',o:['0','5','7','14'],a:2,e:'A neutral solution has pH 7 at room temperature.'},
+        {q:'What is oxidation in terms of electrons?',o:['Gain of electrons','Loss of electrons','Gain of neutrons','Loss of protons'],a:1,e:'Oxidation is loss of electrons; reduction is gain of electrons.'},
+        {q:'Why do ionic compounds conduct electricity when molten?',o:['Their atoms become magnetic','Their ions can move and carry charge','They contain free electrons only','They have no charged particles'],a:1,e:'When molten, ions are mobile and can carry electrical charge.'},
+        {q:'What is a catalyst?',o:['A reactant that is always used up','A substance that speeds a reaction without being used up overall','A product in every reaction','A substance that stops all collisions'],a:1,e:'A catalyst provides an alternative pathway with lower activation energy and is not used up overall.'}
+      ],
+      'Computer Science':[
+        {q:'What is an algorithm?',o:['A finite sequence of steps to solve a problem','A physical computer part','A type of data cable','A programming error only'],a:0,e:'An algorithm is a defined sequence of steps used to solve a problem.'},
+        {q:'Which structure repeats instructions while a condition is true?',o:['Sequence','Iteration','Selection','Declaration'],a:1,e:'Iteration repeats a block of instructions, commonly while a condition is true.'},
+        {q:'What is the purpose of validation?',o:['To prove data is true','To check data follows specified rules','To encrypt every file','To remove all input'],a:1,e:'Validation checks that data is reasonable and follows rules; it does not guarantee truth.'},
+        {q:'What does a trace table help you do?',o:['Track variable values through an algorithm','Increase monitor brightness','Compress an image','Connect to Wi-Fi'],a:0,e:'A trace table records changing values and outputs step by step.'},
+        {q:'Which is an example of selection?',o:['IF score >= 50 THEN pass','Repeat 10 times','Read each item in a list','Run statements in order only'],a:0,e:'Selection chooses between paths based on a condition.'},
+        {q:'What is one reason to test boundary values?',o:['They always produce errors','They check behaviour at the edges of valid ranges','They replace all normal tests','They remove the need for expected outputs'],a:1,e:'Boundary tests check values at the limits of the valid range where mistakes commonly occur.'}
+      ],
+      History:[
+        {q:'What makes evidence useful in a history answer?',o:['It is specific and directly supports the point','It is as long as possible','It avoids dates and context','It repeats the question only'],a:0,e:'Specific, relevant evidence supports an argument when it is explained in context.'},
+        {q:'What is a cause?',o:['A factor that helps bring about an event','An event that happens afterwards only','A historian’s conclusion only','A source’s author'],a:0,e:'A cause is a factor that contributes to an event; causes may have different levels of importance.'},
+        {q:'How should you evaluate a historical source?',o:['Consider content, context, purpose and limitations','Assume it is completely accurate','Only count the words','Ignore who created it'],a:0,e:'Source evaluation considers what it says, who created it, why, when, and what it cannot show.'},
+        {q:'What does “consequence” mean?',o:['A result or effect of an event','The reason an event began','A source’s title','A date range only'],a:0,e:'Consequences are the outcomes of an event and can be short- or long-term.'},
+        {q:'What strengthens a judgement?',o:['A clear decision supported by evidence and reasoning','A list with no explanation','A claim with no evidence','A copied introduction'],a:0,e:'A supported judgement weighs relevant evidence and explains why one factor matters more.'},
+        {q:'Why is context important when using a source?',o:['It helps explain meaning and purpose','It makes the source automatically true','It replaces evidence','It removes bias'],a:0,e:'Context helps explain the circumstances in which a source was created and how that affects interpretation.'}
+      ]
+    };
+    const chosen=bank[subject]||bank.Physics;
+    const qs=Array.from({length:count},(_,i)=>({...chosen[i%chosen.length],n:i+1}));
+    area.innerHTML=`<div class="card"><div class="row"><div><div class="eyebrow">PRACTICE TEST · ${escapeHtml(difficulty.toUpperCase())}</div><h2>${escapeHtml(subject)} · ${escapeHtml(topic)}</h2><p class="sub">${count} questions · choose one answer per question, then mark your test.</p></div><span class="chip accent">Self-marking</span></div><form id="inlinePractice" class="section">${qs.map((q,i)=>`<div class="quiz-question" data-q="${i}"><div class="kicker">QUESTION ${i+1} OF ${count}</div><h3>${escapeHtml(q.q)}</h3>${q.o.map((o,j)=>`<label><input type="radio" name="svq${i}" value="${j}"> <span>${String.fromCharCode(65+j)}. ${escapeHtml(o)}</span></label>`).join('')}<div class="question-feedback" id="feedback${i}" hidden></div></div>`).join('')}<button type="button" class="primary" id="markPractice">Mark my test</button><button type="button" class="secondary" id="resetPractice">Try again</button><div id="practiceScore" class="section"></div></form></div>`;
+    document.getElementById('markPractice').onclick=()=>{let correct=0,answered=0;qs.forEach((q,i)=>{const selected=document.querySelector(`input[name="svq${i}"]:checked`);const feedback=document.getElementById('feedback'+i);feedback.hidden=false;if(selected)answered++;const ok=!!selected&&Number(selected.value)===q.a;if(ok)correct++;feedback.innerHTML=`<strong>${ok?'Correct':'Answer: '+String.fromCharCode(65+q.a)+'. '+escapeHtml(q.o[q.a])}</strong><br>${escapeHtml(q.e)}`;feedback.style.background=ok?'#eaf8ef':'#fff1e8';});const pct=Math.round(correct/qs.length*100);document.getElementById('practiceScore').innerHTML=`<div class="card" style="background:${pct>=70?'#eaf8ef':'#fff4e5'}"><div class="eyebrow">YOUR RESULT</div><h2>${correct}/${qs.length} · ${pct}%</h2><p class="sub">${answered} of ${qs.length} answered. Review every explanation, especially where you guessed or changed your mind.</p><strong>${pct>=80?'Strong work — stretch yourself with challenge questions.':pct>=50?'Good start — revisit the explanations and retry the questions.':'Use the worked explanations to rebuild the basics, then try again.'}</strong></div>`;state.progress.push({label:`Practice ${new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'})}`,value:pct});save();toast('Test marked and result saved locally.');};
+    document.getElementById('resetPractice').onclick=()=>buildPractice();
+  }
+
+  function openSubjectPicker(){
+    const selected=new Set(state.profile.subjects||[]);
+    openModal('Choose your subjects',`<p class="sub">Select the subjects you are studying. Your choice is saved in this browser for the demo.</p><div class="grid grid-2" style="margin-top:12px">${subjects.map(([name])=>`<label class="card tight" style="display:flex;gap:9px;align-items:center"><input type="checkbox" value="${escapeHtml(name)}" ${selected.has(name)?'checked':''} class="subject-check">${escapeHtml(name)}</label>`).join('')}</div><div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="primary" id="saveSubjects">Save subjects</button></div>`);
+    document.getElementById('saveSubjects').onclick=()=>{state.profile.subjects=[...document.querySelectorAll('.subject-check:checked')].map(x=>x.value);save();closeModal();renderSubjects();renderHome();renderMaterials();renderTeacherMaterials();toast('Your subjects have been saved.');};
+  }
+  const universityData={
+    'United Kingdom':['University of Oxford','University of Cambridge','Imperial College London','University College London','The University of Manchester'],
+    'Malaysia':['Universiti Malaya','Universiti Kebangsaan Malaysia','Universiti Putra Malaysia','Taylor’s University','Monash University Malaysia'],
+    'United States':['Massachusetts Institute of Technology','Stanford University','Harvard University','University of California, Berkeley','Carnegie Mellon University'],
+    'Canada':['University of Toronto','University of British Columbia','McGill University','University of Waterloo','University of Alberta'],
+    'Australia':['The University of Melbourne','The University of Sydney','Australian National University','Monash University','UNSW Sydney'],
+    'Singapore':['National University of Singapore','Nanyang Technological University','Singapore Management University','Singapore University of Technology and Design'],
+    'Netherlands':['Delft University of Technology','University of Amsterdam','Leiden University','Erasmus University Rotterdam','Utrecht University']
+  };
+  function showUniversities(){const country=document.getElementById('uniCountry').value;const course=document.getElementById('uniCourse').value;const list=universityData[country]||[];document.getElementById('universityResults').innerHTML=list.map((name,i)=>`<div class="card"><div class="row"><span class="badge-icon">${i+1}</span><span class="chip accent">${escapeHtml(country)}</span></div><h3 style="margin-top:12px">${escapeHtml(name)}</h3><p class="sub">Research ${escapeHtml(course)} course modules, entry requirements, tuition, scholarships and international applicant support.</p><button class="secondary" data-uni-query="${escapeHtml(name)}">Research checklist</button></div>`).join('');document.querySelectorAll('[data-uni-query]').forEach(b=>b.onclick=()=>openModal('University research checklist',`<div class="stack"><p class="sub">For <strong>${escapeHtml(b.dataset.uniQuery)}</strong> · ${escapeHtml(course)}</p><div class="card tight">□ Check the official course page and degree title</div><div class="card tight">□ Confirm subject prerequisites and grades</div><div class="card tight">□ Compare tuition, living costs and scholarships</div><div class="card tight">□ Check application dates and English-language requirements</div><div class="card tight">□ Look at student support, accommodation and career outcomes</div><p class="small muted">University names are examples to research, not a ranking or a guarantee that every institution offers this exact course.</p></div>`));}
+
+  function renderNotebooks(){const saved=JSON.parse(localStorage.getItem('sv-notebooks')||'[]');const items=['Physics · Motion revision','Biology · Cell structure',...saved];document.getElementById('notebooksGrid').innerHTML=items.map((n,i)=>`<div class="card"><div class="row"><span class="badge-icon">${i===0?'ϟ':i===1?'⌬':'✎'}</span><span class="chip ${i<2?'accent':''}">${i<2?'Sample':'Your notebook'}</span></div><h3 style="margin-top:12px">${escapeHtml(n)}</h3><p class="sub">${i<2?'Editable sample notes in your chosen study aesthetic.':'Saved locally in this browser.'}</p><button class="secondary" data-open-notebook="${escapeHtml(n)}">Open notebook</button></div>`).join('');document.querySelectorAll('[data-open-notebook]').forEach(b=>b.onclick=()=>{const paper=document.querySelector('.paper');paper.querySelector('h2').textContent=b.dataset.openNotebook;paper.scrollIntoView({behavior:'smooth',block:'center'});toast('Notebook opened in the editor.');});}
+  function bindNoteTemplates(){
+    document.querySelectorAll('.editor-sidebar .template').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.editor-sidebar .template').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const paper=document.querySelector('.paper');const style=btn.textContent.trim().toLowerCase();paper.dataset.paperStyle=style;paper.style.backgroundColor=paper.dataset.paperColor||'#ffffff';toast(`${btn.textContent.trim()} layout applied.`);}));
+    document.querySelectorAll('[data-paper-color]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelector('.paper').style.backgroundColor=btn.dataset.paperColor;document.querySelector('.paper').dataset.paperColor=btn.dataset.paperColor;document.querySelectorAll('[data-paper-color]').forEach(b=>b.style.outline='none');btn.style.outline='2px solid #7868e8';toast('Paper colour changed.');}));
+  }
+
+  function renderSettings(){document.getElementById('setYear').value=state.profile.year;document.getElementById('setQual').value=state.profile.qualification;document.getElementById('setFreq').value=state.profile.frequency;}
+
+  function createEditableNote(title='Untitled revision notes',subject='General'){
+    const paper=document.querySelector('.paper');paper.innerHTML=`<div class="eyebrow">YOUR NOTES · SAVED IN THIS BROWSER</div><h2 contenteditable="true">${escapeHtml(title)}</h2><div class="chip accent">${escapeHtml(subject)} · Revision</div><div class="note-line" contenteditable="true"><strong>Definition — what is it?</strong><p>Write a precise definition of the key idea in your own words.</p></div><div class="note-line" contenteditable="true"><strong>Key knowledge</strong><p>Add the facts, terms, rules or relationships you need to remember.</p></div><div class="note-line" contenteditable="true"><strong>Worked example</strong><p>Write the question, show each step, explain why you used the method, and check the final answer.</p></div><div class="note-line" contenteditable="true"><strong>Try it yourself</strong><ol><li>Write a recall question.</li><li>Apply the idea to a new example.</li><li>Explain a common mistake.</li></ol></div><div class="note-line" contenteditable="true"><strong>Exam tips</strong><p>Underline command words, show working where relevant, use accurate vocabulary and check your answer.</p></div><button class="secondary" id="saveNoteLocal">Save notes in this browser</button><span id="noteSavedStatus" class="small muted"></span>`;paper.dataset.paperStyle='lined';paper.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('saveNoteLocal').onclick=()=>{const all=JSON.parse(localStorage.getItem('sv-note-content')||'{}');const key=paper.querySelector('h2').innerText.trim()||'Untitled revision notes';all[key]=paper.innerHTML;localStorage.setItem('sv-note-content',JSON.stringify(all));document.getElementById('noteSavedStatus').textContent=' Saved locally.';toast('Notes saved in this browser.');};toast('A new editable note page is ready.');
+  }
+  function wrapSelection(kind,value,label){const sel=window.getSelection();if(!sel||!sel.toString()){toast('Select some text in the notes first, then choose this tool.');return;}try{const range=sel.getRangeAt(0);const span=document.createElement('span');if(kind==='background')span.style.backgroundColor=value;else{span.style.textDecoration='underline';span.style.textDecorationColor=value;span.style.textDecorationThickness='2px';}span.style.borderRadius='3px';range.surroundContents(span);toast(label+' applied.');}catch{toast('For best results, select text within a single paragraph.');}}
+  function bindActions(){
+    document.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click',()=>{
+      const a=btn.dataset.action;
+      if(a==='quick-upload'||a==='browse-upload') uploadDialog();
+      if(a==='create-note'){createEditableNote();}
+      if(a==='new-note'){openModal('New notebook',`<div class="field"><label>Notebook title</label><input class="input" id="newNotebookTitle" placeholder="e.g. Biology — Cell structure"></div><div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="primary" id="createNotebook">Create notebook</button></div>`);document.getElementById('createNotebook').onclick=()=>{const title=document.getElementById('newNotebookTitle').value.trim()||'Untitled notebook';const saved=JSON.parse(localStorage.getItem('sv-notebooks')||'[]');saved.unshift(title);localStorage.setItem('sv-notebooks',JSON.stringify(saved));closeModal();renderNotebooks();toast('Notebook created.');};}
+      if(a==='add-highlight'){wrapSelection('background','#fff09a','Pastel highlight');} if(a==='add-marker'){wrapSelection('background','#ffc7a8','Marker pen');} if(a==='add-underline'){wrapSelection('underline','#7665df','Underline');} if(a==='add-checklist'){document.querySelector('.paper').insertAdjacentHTML('beforeend','<div class="note-line" contenteditable="true"><strong>Revision checklist</strong><br>☐ Define the key term<br>☐ Explain a worked example<br>☐ Answer exam questions<br>☐ Review mistakes</div>');toast('Revision checklist added.');} if(a==='add-diagram'){openModal('Insert diagram',`<div class="card"><h3>Concept map</h3><div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:15px"><span class="chip accent">Main idea</span><span>→</span><span class="chip">Evidence</span><span>→</span><span class="chip">Explanation</span></div></div>`);} if(a==='add-equation'){openModal('Add equation',`<div class="field"><label>Equation or formula</label><input class="input" id="equationInput" placeholder="e.g. speed = distance ÷ time"></div><button class="primary" style="margin-top:12px" id="insertEquation">Insert into notes</button>`);document.getElementById('insertEquation').onclick=()=>{document.querySelector('.paper').insertAdjacentHTML('beforeend',`<div class="note-line" contenteditable="true"><strong>Formula:</strong> ${escapeHtml(document.getElementById('equationInput').value)}</div>`);closeModal();toast('Formula inserted.');};} if(a==='ai-note-add'){const title=document.querySelector('.paper h2')?.textContent||'Core concepts';document.querySelector('.paper').insertAdjacentHTML('beforeend',`<div class="note-line" contenteditable="true"><strong>Study prompt:</strong> Explain ${escapeHtml(title)} in your own words, then add an example and one common mistake.</div>`);toast('Sample study prompt added.');}
+      if(a==='generate-practice') buildPractice();
+      if(a==='build-exam'){document.getElementById('examPlan').insertAdjacentHTML('afterend','<div class="card section" style="background:var(--accent-soft);border-color:#ddd9ff"><strong>Your programme is ready.</strong><div class="sub" style="font-size:10px;margin-top:5px">StudyVerse will move stage priorities as new practice and progress evidence arrives.</div></div>');toast('Adaptive exam programme built.');}
+      if(a==='add-session') toast('Add-session editor is ready for your next planner update.');
+      if(a==='notifications') toast('No new notifications.');
+      if(a==='upgrade') toast('Plus preview opened.');
+      if(a==='new-post') newPost();
+      if(a==='start-lesson') toast('Lesson opened.');
+      if(a==='search-interest') searchInterest();
+      if(a==='save-settings'){state.profile.year=document.getElementById('setYear').value;state.profile.qualification=document.getElementById('setQual').value;state.profile.frequency=document.getElementById('setFreq').value;save();toast('Profile saved.');}
+    }));
+  }
+
+  document.getElementById('selectSubjects').addEventListener('click',openSubjectPicker);
+  document.querySelectorAll('.choose-plan').forEach(btn=>btn.addEventListener('click',()=>{localStorage.setItem('sv-selected-plan',btn.dataset.plan);document.getElementById('planSelection').textContent='Selected: '+btn.dataset.plan+' (demo only — no payment taken).';toast('Plan selection saved for this demo.');}));
+  document.getElementById('findUniversities').addEventListener('click',showUniversities);
+  document.getElementById('makeSampleNotes').addEventListener('click',()=>{const subject=document.getElementById('sampleNotesSubject').value;const paper=document.querySelector('.paper');const chosenColor=paper.dataset.paperColor||paper.style.backgroundColor||'#ffffff';paper.innerHTML='<div class="eyebrow">DETAILED SAMPLE NOTEBOOK · '+escapeHtml(subject)+'</div><h2 contenteditable="true">'+escapeHtml(subject)+' — '+escapeHtml(({Physics:'Motion and graphs',Mathematics:'Algebra and equations',Biology:'Cells and transport',Chemistry:'Atoms, bonding and reactions'}[subject]||'Detailed revision guide'))+'</h2><div class="chip accent">'+escapeHtml(subject)+' · Revision pack</div>'+detailedNoteContent(subject)+'<button class="secondary" id="saveDetailedNote">Save notes in this browser</button><span id="noteSavedStatus" class="small muted"></span>';paper.dataset.paperStyle='lined';paper.dataset.paperColor=chosenColor;paper.style.backgroundColor=chosenColor;document.getElementById('saveDetailedNote').onclick=()=>{const all=JSON.parse(localStorage.getItem('sv-note-content')||'{}');const key=paper.querySelector('h2').innerText.trim()||'Untitled revision notes';all[key]=paper.innerHTML;localStorage.setItem('sv-note-content',JSON.stringify(all));document.getElementById('noteSavedStatus').textContent=' Saved locally in this browser.';toast('Detailed notes saved.');};toast('Detailed notes with vocabulary, worked example, diagram, questions and exam tips created for '+subject+'.');});
+  document.querySelectorAll('[data-filter]').forEach(btn=>btn.addEventListener('click',()=>renderCommunity(btn.dataset.filter)));
+  document.getElementById('globalSearch').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();if(q.length<2)return; const match=[...document.querySelectorAll('.nav-btn')].find(b=>b.textContent.toLowerCase().includes(q));if(match){match.click();}});
+  document.getElementById('materialFilter').addEventListener('change',renderMaterials);
+  document.getElementById('sendChat').addEventListener('click',sendChat);
+  document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+  document.getElementById('interestInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchInterest();});
+  document.getElementById('materialInput').addEventListener('change',e=>{const f=e.target.files[0];if(f)handleUpload(f,e.target.dataset.subject,e.target.dataset.title);e.target.value='';});
+  document.getElementById('uploadZone').addEventListener('dragover',e=>{e.preventDefault();e.currentTarget.classList.add('drag')});
+  document.getElementById('uploadZone').addEventListener('dragleave',e=>e.currentTarget.classList.remove('drag'));
+  document.getElementById('uploadZone').addEventListener('drop',e=>{e.preventDefault();e.currentTarget.classList.remove('drag');const f=e.dataTransfer.files[0];if(f) {const input=document.getElementById('materialInput');input.dataset.subject=state.profile.subjects[0]||'General';input.dataset.title='';handleUpload(f,input.dataset.subject,'');}});
+  window.addEventListener('load',()=>{
+    document.getElementById('avatar').textContent=(state.profile.year.match(/Year (\d+)/)?.[1]||'SV').slice(0,2)+'S';
+    document.getElementById('practiceSubject').innerHTML=subjectOptions();
+    renderHome();renderSubjects();renderGuides();renderLessons();renderPlanner();renderProgress();renderMap();renderRewards();renderCommunity();renderFuture();renderSettings();renderNotebooks();bindNoteTemplates();bindActions();renderExamPlan();renderTeacherMaterials();showUniversities();loadMaterials();if(localStorage.getItem('sv-onboarding-complete')!=='yes'){setTimeout(openOnboarding,350);}
+  });
+})();
+</script>
+</body>
+</html>
